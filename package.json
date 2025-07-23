@@ -1,6 +1,6 @@
 {
   "name": "smartcheckout-sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A modern, secure JavaScript SDK for credit card data collection with PCI-compliant handling and customizable styling",
   "main": "dist/SmartCheckout.js",
   "types": "dist/SmartCheckout.d.ts",
@@ -58,4 +58,4 @@
   "bugs": {
     "url": "https://github.com/Fewsats/smartcheckout-ts/issues"
   }
-} 
+}
