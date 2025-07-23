@@ -1,0 +1,53 @@
+{
+  "name": "@smartcheckout/sdk",
+  "version": "1.0.0",
+  "description": "A reusable JavaScript package for secure credit card storage using VGS Collect - available as both inline JS and secure iframe",
+  "main": "dist/SmartCheckout.js",
+  "types": "dist/SmartCheckout.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/SmartCheckout.js",
+      "types": "./dist/SmartCheckout.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:types": "tsc --declaration --emitDeclarationOnly",
+    "build:package": "npm run build && npm run build:types",
+    "preview": "vite preview",
+    "start": "vite",
+    "type-check": "tsc --noEmit",
+    "pack:test": "npm run build:package && npm pack",
+    "prepublishOnly": "npm run build:package"
+  },
+  "dependencies": {
+    "@vgs/collect-js": "^0.7.2"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "vgs",
+    "collect",
+    "payment",
+    "form",
+    "iframe",
+    "smartcheckout",
+    "credit-card",
+    "secure-payments"
+  ],
+  "author": "SmartCheckout Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/smartcheckout-ts.git"
+  },
+  "homepage": "https://github.com/yourusername/smartcheckout-ts#readme",
+  "bugs": {
+    "url": "https://github.com/yourusername/smartcheckout-ts/issues"
+  }
+} 

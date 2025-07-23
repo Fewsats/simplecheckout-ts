@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCheckout npm Package Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SmartCheckout npm Package Test</h1>
+        <p>This example demonstrates importing and using the SmartCheckout npm package.</p>
+        
+        <div class="form-container">
+            <div id="checkout-container"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="submit-btn" disabled>Submit Form</button>
+            <button id="unmount-btn">Unmount Form</button>
+            <button id="remount-btn">Remount Form</button>
+        </div>
+        
+        <div id="status" class="status info">
+            Ready to test the local package...
+        </div>
+    </div>
+
+    <script type="module">
+        import SmartCheckout from '@smartcheckout/sdk';
+        
+        let smartcheckout = null;
+        let creditCardForm = null;
+        
+        const statusEl = document.getElementById('status');
+        const submitBtn = document.getElementById('submit-btn');
+        const unmountBtn = document.getElementById('unmount-btn');
+        const remountBtn = document.getElementById('remount-btn');
+        
+        function updateStatus(message, type = 'info') {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        async function initializeForm() {
+            try {
+                updateStatus('Initializing SmartCheckout...', 'info');
+                
+                // Get API key from URL or use a test key
+                const urlParams = new URLSearchParams(window.location.search);
+                const apiKey = urlParams.get('apiKey') || 'sk_test_demo_key';
+                
+                smartcheckout = new SmartCheckout(apiKey);
+                
+                creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
+                    onSuccess: (result) => {
+                        updateStatus(`Success! Token: ${result.token}`, 'success');
+                        console.log('Card stored successfully:', result);
+                    },
+                    onError: (error) => {
+                        updateStatus(`Error: ${error.message}`, 'error');
+                        console.error('Error storing card:', error);
+                    }
+                });
+                
+                creditCardForm.mount('#checkout-container');
+                updateStatus('Form mounted successfully!', 'success');
+                submitBtn.disabled = false;
+                
+            } catch (error) {
+                updateStatus(`Initialization error: ${error.message}`, 'error');
+                console.error('Initialization error:', error);
+            }
+        }
+        
+        // Event listeners
+        submitBtn.addEventListener('click', async () => {
+            if (!creditCardForm) return;
+            
+            try {
+                updateStatus('Submitting form...', 'info');
+                submitBtn.disabled = true;
+                
+                const result = await creditCardForm.submit();
+                updateStatus(`Form submitted successfully! Token: ${result.token}`, 'success');
+                
+            } catch (error) {
+                updateStatus(`Submit error: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+        
+        unmountBtn.addEventListener('click', () => {
+            if (!creditCardForm) return;
+            
+            creditCardForm.unmount();
+            updateStatus('Form unmounted', 'info');
+            submitBtn.disabled = true;
+        });
+        
+        remountBtn.addEventListener('click', () => {
+            if (!creditCardForm) return;
+            
+            creditCardForm.mount('#checkout-container');
+            updateStatus('Form remounted', 'success');
+            submitBtn.disabled = false;
+        });
+        
+        // Initialize on page load
+        initializeForm();
+    </script>
+</body>
+</html> 

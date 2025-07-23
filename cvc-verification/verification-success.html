@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Success - SmartCheckout</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: #374151;
+            margin-bottom: 16px;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .message {
+            color: #6b7280;
+            margin-bottom: 32px;
+            font-size: 15px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        .email-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .next-steps {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            color: #1d4ed8;
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.1px;
+        }
+
+        .next-steps ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #374151;
+        }
+
+        .next-steps li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            letter-spacing: -0.1px;
+        }
+
+        .btn-primary {
+            background: #4CA6E6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3d95d9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(76, 166, 230, 0.25);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+
+        .logo {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 12px;
+            color: #999;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+            text-decoration: none;
+            cursor: default;
+            font-weight: 400;
+            letter-spacing: -0.05px;
+            margin-top: 16px;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .logo svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .logo-text {
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .message {
+                font-size: 14px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .logo {
+                bottom: 12px;
+                right: 12px;
+                font-size: 11px;
+                margin-top: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+        </div>
+
+        <h1>CVC Verification Successful!</h1>
+        <p class="message">
+            Your card security code has been verified successfully. Your transaction is now complete.
+        </p>
+
+        <div class="email-display" id="email-display">
+            <!-- Email will be populated here -->
+        </div>
+
+        <div class="next-steps">
+            <h3>What happens next?</h3>
+            <ul>
+                <li>Your transaction will be processed within the next few minutes</li>
+                <li>You'll receive a confirmation email with transaction details</li>
+                <li>Your card information is securely stored for future use</li>
+                <li>You can close this window and return to your account</li>
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="window.close()">Close Window</button>
+        </div>
+
+        <div class="logo">
+            <svg class="smartcheckout-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.7172 28.509L3 23.496V19.6072L11.7172 24.6206L20.4341 19.6072V23.496L11.7172 28.509Z" fill="#4CA6E6"/>
+                <path d="M20.2826 3.45822L11.5654 8.47122V12.3594L20.2826 7.34638L28.9995 12.3594V8.47122L20.2826 3.45822Z" fill="#4CA6E6"/>
+                <path d="M3 18.5629L11.7172 23.5762L15.0975 21.6319L6.3806 16.6186V6.59199L3 8.53623V18.5629Z" fill="#4CA6E6"/>
+                <path d="M24.7233 25.987L16.0061 31L12.6255 29.0558L21.3424 24.0428V14.0161L24.7233 15.9604V25.987Z" fill="#4CA6E6"/>
+                <path d="M7.30664 6.01359L7.30696 16.0399L10.6876 17.9841V7.9575L19.4044 2.94451L16.0239 0.999954L7.30664 6.01359Z" fill="#4CA6E6"/>
+                <path d="M28.9993 13.4039V23.4305L25.6187 25.3748V15.3484L16.9019 10.3348L20.2825 8.39025L28.9993 13.4039Z" fill="#4CA6E6"/>
+            </svg>
+            <span class="logo-text">by SmartCheckout</span>
+        </div>
+    </div>
+
+    <script>
+        // Get email from URL parameters or localStorage
+        function getEmailFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('email');
+        }
+
+        function getEmailFromLocalStorage() {
+            return localStorage.getItem('cvc_verification_email');
+        }
+
+        function displayEmail() {
+            const email = getEmailFromUrl() || getEmailFromLocalStorage();
+            const emailDisplay = document.getElementById('email-display');
+            
+            if (email) {
+                emailDisplay.textContent = email;
+            } else {
+                emailDisplay.style.display = 'none';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            displayEmail();
+            
+            // Auto-close after 10 seconds (optional)
+            setTimeout(() => {
+                if (confirm('Would you like to close this window?')) {
+                    window.close();
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+</html> 

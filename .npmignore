@@ -1,0 +1,6 @@
+# Only include dist/ and package files
+*
+!dist/**
+!package.json
+!README.md
+!LICENSE 

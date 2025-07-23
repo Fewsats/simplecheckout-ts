@@ -1,0 +1,125 @@
+name: Deploy CVC Verification to Cloudflare R2
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'cvc-verification/**'
+      - '.github/workflows/deploy-cvc-verification.yml'
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: 'cvc-verification/package-lock.json'
+
+    - name: Install dependencies
+      working-directory: ./cvc-verification
+      run: npm ci
+
+    - name: Build project
+      working-directory: ./cvc-verification
+      run: npm run build
+      env:
+        # Add your environment variables here
+        VITE_VGS_VAULT_ID: ${{ secrets.VITE_VGS_VAULT_ID }}
+        VITE_VGS_ENVIRONMENT: ${{ secrets.VITE_VGS_ENVIRONMENT }}
+        VITE_VGS_ROUTE_ID: ${{ secrets.VITE_VGS_ROUTE_ID }}
+        VITE_VGS_VERSION: ${{ secrets.VITE_VGS_VERSION }}
+        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+
+    - name: Verify AWS CLI
+      run: aws --version
+
+    - name: Deploy to Cloudflare R2
+      working-directory: ./cvc-verification
+      run: |
+        # Configure AWS CLI for R2
+        aws configure set aws_access_key_id ${{ secrets.R2_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        aws configure set region auto
+        
+        # Set R2 endpoint
+        R2_ENDPOINT="https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+        
+        # Upload HTML files with proper content type and cache control
+        echo "📄 Uploading HTML files..."
+        aws s3 cp dist/index.html s3://${{ secrets.R2_BUCKET_NAME }}/index.html \
+          --endpoint-url=$R2_ENDPOINT \
+          --content-type="text/html" \
+          --cache-control="public, max-age=300"
+        
+        aws s3 cp dist/verification-success.html s3://${{ secrets.R2_BUCKET_NAME }}/verification-success.html \
+          --endpoint-url=$R2_ENDPOINT \
+          --content-type="text/html" \
+          --cache-control="public, max-age=300"
+        
+        # Upload assets with long-term caching
+        echo "📦 Uploading assets..."
+        if [ -d "dist/assets" ]; then
+          for file in dist/assets/*; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              echo "  📁 Uploading $filename..."
+              
+              if [[ "$filename" == *.js ]]; then
+                aws s3 cp "$file" s3://${{ secrets.R2_BUCKET_NAME }}/assets/$filename \
+                  --endpoint-url=$R2_ENDPOINT \
+                  --content-type="application/javascript" \
+                  --cache-control="public, max-age=31536000, immutable"
+              elif [[ "$filename" == *.css ]]; then
+                aws s3 cp "$file" s3://${{ secrets.R2_BUCKET_NAME }}/assets/$filename \
+                  --endpoint-url=$R2_ENDPOINT \
+                  --content-type="text/css" \
+                  --cache-control="public, max-age=31536000, immutable"
+              elif [[ "$filename" == *.svg ]]; then
+                aws s3 cp "$file" s3://${{ secrets.R2_BUCKET_NAME }}/assets/$filename \
+                  --endpoint-url=$R2_ENDPOINT \
+                  --content-type="image/svg+xml" \
+                  --cache-control="public, max-age=31536000, immutable"
+              elif [[ "$filename" == *.png ]]; then
+                aws s3 cp "$file" s3://${{ secrets.R2_BUCKET_NAME }}/assets/$filename \
+                  --endpoint-url=$R2_ENDPOINT \
+                  --content-type="image/png" \
+                  --cache-control="public, max-age=31536000, immutable"
+              elif [[ "$filename" == *.jpg ]] || [[ "$filename" == *.jpeg ]]; then
+                aws s3 cp "$file" s3://${{ secrets.R2_BUCKET_NAME }}/assets/$filename \
+                  --endpoint-url=$R2_ENDPOINT \
+                  --content-type="image/jpeg" \
+                  --cache-control="public, max-age=31536000, immutable"
+              else
+                aws s3 cp "$file" s3://${{ secrets.R2_BUCKET_NAME }}/assets/$filename \
+                  --endpoint-url=$R2_ENDPOINT \
+                  --cache-control="public, max-age=31536000, immutable"
+              fi
+            fi
+          done
+        else
+          echo "  ⚠️ No assets directory found, skipping asset upload"
+        fi
+
+    - name: Purge Cloudflare Cache
+      run: |
+        curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}'
+
+    - name: Deployment Summary
+      run: |
+        echo "✅ CVC Verification deployed successfully to Cloudflare R2!"
+        echo "🌐 Your site should be available at your custom domain"
+        echo "🔄 Cloudflare cache has been purged for immediate updates" 

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Required - SmartCheckout</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        html {
+            font-size: 16px;
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            margin-bottom: 32px;
+            color: #6b7280;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+            letter-spacing: -0.2px;
+        }
+
+
+        .error-page {
+            text-align: center;
+        }
+
+        .error-page h1 {
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .error-page p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1890FF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        #loading-content p {
+            font-size: 15px;
+            color: #6b7280;
+            margin-top: 16px;
+            font-weight: 400;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      form {
+        max-width: 100%;
+        margin: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: #374151;
+        letter-spacing: -0.1px;
+        text-align: left;
+      }
+
+      .form-field {
+        width: 100%;
+        height: 50px;
+        position: relative;
+        margin-bottom: 0;
+        border-radius: 8px;
+        border: 1px solid #e5e5e5;
+        padding: 0;
+        background-color: #ffffff;
+        transition: all 0.2s ease;
+        overflow: hidden;
+      }
+
+      .form-field:focus-within {
+        border-color: #0f0f0f;
+        box-shadow: 0 0 0 2px rgba(15, 15, 15, 0.1);
+      }
+
+      .form-field:hover:not(:focus-within) {
+        border-color: #d0d0d0;
+      }
+
+      .form-field iframe {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        outline: none !important;
+        padding: 4px 8px !important;
+        box-sizing: border-box !important;
+      }
+
+
+
+      button[type="submit"] {
+        width: 100%;
+        height: 48px;
+        margin-top: 24px;
+        margin-bottom: 16px;
+        padding: 0 24px;
+        font-size: 15px;
+        font-weight: 500;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: #ffffff;
+        background: #4CA6E6;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        outline: none;
+        text-align: center;
+        letter-spacing: -0.1px;
+      }
+
+      button[type="submit"]:hover:not(:disabled) {
+        background: #3d95d9;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 16px rgba(76, 166, 230, 0.25);
+      }
+
+      button[type="submit"]:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 4px 8px rgba(76, 166, 230, 0.25);
+      }
+
+      button[type="submit"]:disabled {
+        background: #f5f5f5;
+        color: #8a8a8a;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .form-field.vgs-collect-container__focused {
+        border-color: #0f0f0f !important;
+        box-shadow: 0 0 0 2px rgba(15, 15, 15, 0.1) !important;
+      }
+
+      .form-field.vgs-collect-container__invalid.vgs-collect-container__dirty:not(.vgs-collect-container__focused),
+      .form-field.vgs-collect-container__invalid.vgs-collect-container__touched:not(.vgs-collect-container__focused) {
+        border-color: #df1b41 !important;
+        box-shadow: 0 0 0 2px rgba(223, 27, 65, 0.1) !important;
+      }
+
+      /* VGS container styling */
+      .vgs-collect-container {
+        width: 100% !important;
+        height: 100% !important;
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        min-height: 50px !important;
+      }
+
+      .vgs-collect-container iframe {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        outline: none !important;
+        padding: 4px 8px !important;
+        box-sizing: border-box !important;
+      }
+
+      .status-message {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        text-align: center;
+        font-weight: 500;
+        min-height: 2rem;
+        transition: all 0.3s ease;
+      }
+
+      .status-message.success {
+        background-color: #f6ffed;
+        border: 1px solid #b7eb8f;
+        color: #52c41a;
+      }
+
+      .status-message.error {
+        background-color: #fff2f0;
+        border: 1px solid #ffccc7;
+        color: #ff4d4f;
+      }
+
+      .status-message.warning {
+        background-color: #fffbe6;
+        border: 1px solid #ffe58f;
+        color: #faad14;
+      }
+
+      .status-message.loading {
+        background-color: #e6f7ff;
+        border: 1px solid #91d5ff;
+        color: #1890ff;
+      }
+
+      .status-message:empty {
+        display: none;
+      }
+
+      /* SmartCheckout signature */
+      .smartcheckout-signature {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 12px;
+        color: #999;
+        opacity: 0.6;
+        transition: opacity 0.2s ease;
+        text-decoration: none;
+        cursor: default;
+        font-weight: 400;
+        letter-spacing: -0.05px;
+      }
+
+      .smartcheckout-signature:hover {
+        opacity: 0.8;
+      }
+
+      .smartcheckout-logo {
+        flex-shrink: 0;
+      }
+
+      /* Responsive design */
+      @media (max-width: 480px) {
+        .container {
+          margin: 10px;
+          padding: 20px;
+        }
+        
+        form {
+          margin: 10px auto;
+        }
+        
+        .form-field-group {
+          flex-direction: column;
+        }
+        
+        .form-field-group div {
+          flex: 1 1 100%;
+        }
+        
+        .form-field-group div:first-child div {
+          border-radius: 4px 4px 0 0;
+          clip-path: none;
+          margin-bottom: 0;
+        }
+        
+        .form-field-group div:last-child div {
+          border-radius: 0 0 4px 4px;
+        }
+        
+        .smartcheckout-signature {
+          bottom: 12px;
+          right: 12px;
+          font-size: 11px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Loading form...</p>
+        </div>
+
+        <div id="error-content" style="display: none;">
+            <div class="error-page">
+                <h1>Verification Failed</h1>
+                <p id="error-message">The verification link is invalid or has expired.</p>
+                <a href="/" class="back-btn">Go Back</a>
+            </div>
+        </div>
+
+        <div id="verification-content" style="display: none;">
+            <div class="logo">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.7172 28.509L3 23.496V19.6072L11.7172 24.6206L20.4341 19.6072V23.496L11.7172 28.509Z" fill="#4CA6E6"/>
+                    <path d="M20.2826 3.45822L11.5654 8.47122V12.3594L20.2826 7.34638L28.9995 12.3594V8.47122L20.2826 3.45822Z" fill="#4CA6E6"/>
+                    <path d="M3 18.5629L11.7172 23.5762L15.0975 21.6319L6.3806 16.6186V6.59199L3 8.53623V18.5629Z" fill="#4CA6E6"/>
+                    <path d="M24.7233 25.987L16.0061 31L12.6255 29.0558L21.3424 24.0428V14.0161L24.7233 15.9604V25.987Z" fill="#4CA6E6"/>
+                    <path d="M7.30664 6.01359L7.30696 16.0399L10.6876 17.9841V7.9575L19.4044 2.94451L16.0239 0.999954L7.30664 6.01359Z" fill="#4CA6E6"/>
+                    <path d="M28.9993 13.4039V23.4305L25.6187 25.3748V15.3484L16.9019 10.3348L20.2825 8.39025L28.9993 13.4039Z" fill="#4CA6E6"/>
+                </svg>
+            </div>
+
+            <h1>Verification Required</h1>
+            <p class="subtitle">
+                For your security, we need to verify your card's CVC code to complete this transaction.
+            </p>
+
+            <form id="cvc-form">
+                <label>Card Security Code (CVC)</label>
+                <div id="sc-cvc" class="form-field"></div>
+
+                <button type="submit" id="submit-btn">Verify CVC</button>
+            </form>
+
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { loadVGSCollect } from '@vgs/collect-js';
+        
+        class CVCVerificationPage {
+            constructor() {
+                this.vgsForm = null;
+                this.cvcField = null;
+                this.code = '';
+
+                
+                this.loadingContent = document.getElementById('loading-content');
+                this.errorContent = document.getElementById('error-content');
+                this.verificationContent = document.getElementById('verification-content');
+                this.statusMessage = document.getElementById('status-message');
+                this.submitBtn = document.getElementById('submit-btn');
+                this.cvcForm = document.getElementById('cvc-form');
+                
+                this.init();
+            }
+            
+            async init() {
+                try {
+                    // Parse URL query parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    
+                    this.code = urlParams.get('code') || '';
+                    
+                    // Validate required parameters
+                    if (!this.code) {
+                        throw new Error('Code parameter is required');
+                    }
+                    
+                    // Validate code format (basic check)
+                    if (this.code.length < 5) {
+                        throw new Error('Invalid verification code');
+                    }
+                    
+                    // Initialize VGS and form directly
+                    await this.initializeForm();
+                    
+                    // Show verification content
+                    this.showVerificationContent();
+                    
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    this.showError(error.message);
+                }
+            }
+            
+            showVerificationContent() {
+                this.loadingContent.style.display = 'none';
+                this.errorContent.style.display = 'none';
+                this.verificationContent.style.display = 'block';
+            }
+            
+            async initializeForm() {
+                try {
+                    // Get VGS configuration from environment variables
+                    const vgsConfig = this.getVGSConfigFromEnv();
+                    
+                    // Initialize VGS Collect
+                    const collect = await loadVGSCollect({
+                        vaultId: vgsConfig.vaultId,
+                        environment: vgsConfig.environment,
+                        version: vgsConfig.version
+                    });
+                    
+                    // Initialize VGS form
+                    this.vgsForm = collect.init((state) => {
+                        // Update form status when VGS state changes
+                        this.updateFormStatus(state);
+                    });
+                    
+                    // Set route ID
+                    this.vgsForm.setRouteId(vgsConfig.routeId);
+                    
+                    // Create CVC field
+                    this.cvcField = this.vgsForm.field('#sc-cvc', {
+                        type: 'card-security-code',
+                        name: 'card_cvc',
+                        placeholder: '123',
+                        showCardIcon: true,
+                        validations: ['required', 'validCardSecurityCode'],
+                        css: this.getFieldStyling()
+                    });
+                    
+                    // Setup form submission
+                    this.setupFormSubmission();
+                    
+                } catch (error) {
+                    console.error('Form initialization error:', error);
+                    throw new Error('Failed to initialize verification form');
+                }
+            }
+            
+            setupFormSubmission() {
+                this.cvcForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await this.submitCVC();
+                });
+            }
+            
+            async submitCVC() {
+                try {
+                    this.showStatus('Verifying CVC...', 'loading');
+                    this.submitBtn.disabled = true;
+                    
+                    return new Promise((resolve, reject) => {
+                        this.vgsForm.submit('/post', {}, async (status, data) => {
+                            if (status >= 200 && status <= 300) {
+                                try {
+                                    // Send CVC data to backend for verification
+                                    const result = await this.updateCVC(data);
+                                    
+                                    this.showStatus('CVC verified successfully!', 'success');
+                                    
+                                    // Redirect to success page or show success message
+                                    setTimeout(() => {
+                                        window.location.href = './verification-success.html';
+                                    }, 5000);
+                                    
+                                    resolve(result);
+                                    
+                                } catch (error) {
+                                    // this.showStatus(`Verification failed: ${error.message}`, 'error'); // For debugging
+                                    this.showStatus(`Verification failed: There was an error with the verification process. Please try again.`, 'error');
+                                    reject(error);
+                                }
+                            } else if (!status) {
+                                const error = new Error('Network error occurred');
+                                this.showStatus('Network error occurred. Please try again.', 'error');
+                                reject(error);
+                            } else {
+                                const error = new Error(`Server error (${status})`);
+                                this.showStatus(`Server error (${status}). Please try again.`, 'error');
+                                reject(error);
+                            }
+                        }, (validationError) => {
+                            const error = new Error('Please enter a valid CVC code');
+                            this.showStatus('Please enter a valid CVC code.', 'error');
+                            reject(error);
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('CVC submission error:', error);
+                    // this.showStatus(`Verification failed: ${error.message}`, 'error'); // For debugging
+                    this.showStatus(`Verification failed: There was an error with the verification process. Please try again.`, 'error');
+                } finally {
+                    this.submitBtn.disabled = false;
+                }
+            }
+            
+            async updateCVC(vgsData) {
+                // Extract CVC from VGS data and map to correct field name
+                const requestBody = {
+                    code: this.code,
+                    cvc: vgsData.card_cvc
+                };
+                
+                const response = await fetch(`${this.getApiBaseUrl()}/v0/company/update-cvc`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    if (response.status >= 400 && response.status < 500 && result.error) {
+                        throw new Error(result.error);
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return result;
+            }
+            
+            updateFormStatus(state) {
+                // Button is always enabled, no validation logic
+                this.submitBtn.disabled = false;
+            }
+            
+            showVerificationContent() {
+                this.loadingContent.style.display = 'none';
+                this.errorContent.style.display = 'none';
+                this.verificationContent.style.display = 'block';
+            }
+            
+            showError(message) {
+                this.loadingContent.style.display = 'none';
+                this.verificationContent.style.display = 'none';
+                this.errorContent.style.display = 'block';
+                
+                document.getElementById('error-message').textContent = message;
+            }
+            
+            showStatus(message, type = 'info') {
+                this.statusMessage.textContent = message;
+                this.statusMessage.className = `status-message ${type}`;
+                
+                if (type === 'success') {
+                    setTimeout(() => {
+                        this.statusMessage.textContent = '';
+                        this.statusMessage.className = 'status-message';
+                    }, 5000);
+                }
+            }
+            
+            getFieldStyling() {
+                return {
+                    boxSizing: 'border-box',
+                    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                    fontSize: '15px',
+                    color: '#374151',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    width: '100%',
+                    height: '100%',
+                    padding: '4px 8px',
+                    fontWeight: '400',
+                    '&::placeholder': {
+                        color: '#8a8a8a',
+                        fontWeight: '400'
+                    }
+                };
+            }
+            
+            getVGSConfigFromEnv() {
+                // Get VGS configuration from environment variables
+                const vaultId = import.meta.env.VITE_VGS_VAULT_ID;
+                const environment = import.meta.env.VITE_VGS_ENVIRONMENT;
+                const routeId = import.meta.env.VITE_VGS_ROUTE_ID;
+                const version = import.meta.env.VITE_VGS_VERSION || '3.1.0';
+                
+                // Validate required environment variables
+                if (!vaultId) {
+                    throw new Error('VGS_VAULT_ID environment variable is required');
+                }
+                
+                if (!environment) {
+                    throw new Error('VGS_ENVIRONMENT environment variable is required');
+                }
+                
+                if (!routeId) {
+                    throw new Error('VGS_ROUTE_ID environment variable is required');
+                }
+                
+                const vgsConfig = {
+                    vaultId,
+                    environment,
+                    routeId,
+                    version
+                };
+                
+                return vgsConfig;
+            }
+            
+            getApiBaseUrl() {
+                // Use environment variable for API base URL, fallback to localhost for development
+                return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+            }
+        }
+        
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new CVCVerificationPage();
+        });
+    </script>
+</body>
+</html> 
