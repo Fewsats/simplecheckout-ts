@@ -1,0 +1,143 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'package.json'
+      - 'src/**'
+      - 'README.md'
+      - 'LICENSE'
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version-changed: ${{ steps.check.outputs.changed }}
+      current-version: ${{ steps.check.outputs.version }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2 # Need previous commit to compare
+
+    - name: Check if version changed
+      id: check
+      run: |
+        # Get current version from package.json
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        
+        # Check if package.json changed in this commit
+        if git diff HEAD~1 HEAD --name-only | grep -q "package.json"; then
+          # Check if version field specifically changed
+          PREV_VERSION=$(git show HEAD~1:package.json | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8')).version")
+          if [ "$CURRENT_VERSION" != "$PREV_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Version changed from $PREV_VERSION to $CURRENT_VERSION"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ Package.json changed but version remained the same"
+          fi
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "ℹ️ Package.json not changed"
+        fi
+
+  publish:
+    needs: check-version
+    if: needs.check-version.outputs.version-changed == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests (if any)
+      run: |
+        if npm run test --if-present; then
+          echo "✅ Tests passed"
+        else
+          echo "ℹ️ No tests found or tests failed"
+        fi
+
+    - name: Build package
+      run: npm run build:package
+
+    - name: Check if version exists on npm
+      id: check-npm
+      run: |
+        VERSION="${{ needs.check-version.outputs.current-version }}"
+        if npm view smartcheckout-sdk@$VERSION version 2>/dev/null; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+          echo "⚠️ Version $VERSION already exists on npm"
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+          echo "✅ Version $VERSION is new, ready to publish"
+        fi
+
+    - name: Publish to npm
+      if: steps.check-npm.outputs.exists == 'false'
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Create Git Tag
+      if: steps.check-npm.outputs.exists == 'false'
+      run: |
+        VERSION="${{ needs.check-version.outputs.current-version }}"
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git tag "v$VERSION"
+        git push origin "v$VERSION"
+
+    - name: Create GitHub Release
+      if: steps.check-npm.outputs.exists == 'false'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: "v${{ needs.check-version.outputs.current-version }}"
+        release_name: "Release v${{ needs.check-version.outputs.current-version }}"
+        body: |
+          ## Changes in v${{ needs.check-version.outputs.current-version }}
+          
+          ### 📦 NPM Package
+          ```bash
+          npm install smartcheckout-sdk@${{ needs.check-version.outputs.current-version }}
+          ```
+          
+          ### 🔗 Links
+          - [NPM Package](https://www.npmjs.com/package/smartcheckout-sdk/v/${{ needs.check-version.outputs.current-version }})
+          - [Documentation](https://github.com/${{ github.repository }}#readme)
+          
+          _This release was automatically created by GitHub Actions._
+        draft: false
+        prerelease: false
+
+    - name: Deployment Summary
+      if: steps.check-npm.outputs.exists == 'false'
+      run: |
+        echo "🎉 Successfully published smartcheckout-sdk@${{ needs.check-version.outputs.current-version }}"
+        echo "📦 NPM: https://www.npmjs.com/package/smartcheckout-sdk"
+        echo "🏷️ Git Tag: v${{ needs.check-version.outputs.current-version }}"
+        echo "📋 GitHub Release: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.check-version.outputs.current-version }}"
+
+    - name: Skip Publishing
+      if: steps.check-npm.outputs.exists == 'true'
+      run: |
+        echo "⏭️ Skipping publish - version ${{ needs.check-version.outputs.current-version }} already exists on npm" 

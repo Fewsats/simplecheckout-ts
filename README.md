@@ -1,19 +1,18 @@
-# SmartCheckout
+# SmartCheckout SDK
 
 A modern, reusable TypeScript package for securely storing credit card information using SmartCheckout.
 
 ## Installation
 
 ```bash
-npm install @smartcheckout/sdk
+npm install smartcheckout-sdk
 ```
 
 ## Quick Start
 
-### 1. Basic Usage
+```javascript
+import SmartCheckout from 'smartcheckout-sdk';
 
-```typescript
-import SmartCheckout from '@smartcheckout/sdk';
 
 // Initialize SmartCheckout with your API key
 const smartcheckout = new SmartCheckout('sk_test_your_api_key_here');
