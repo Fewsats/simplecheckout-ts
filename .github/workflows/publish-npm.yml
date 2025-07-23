@@ -52,10 +52,15 @@ jobs:
     needs: check-version
     if: needs.check-version.outputs.version-changed == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating tags and releases
+      id-token: write  # Required for npm publishing
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -107,12 +112,10 @@ jobs:
 
     - name: Create GitHub Release
       if: steps.check-npm.outputs.exists == 'false'
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: "v${{ needs.check-version.outputs.current-version }}"
-        release_name: "Release v${{ needs.check-version.outputs.current-version }}"
+        name: "Release v${{ needs.check-version.outputs.current-version }}"
         body: |
           ## Changes in v${{ needs.check-version.outputs.current-version }}
           
@@ -128,6 +131,8 @@ jobs:
           _This release was automatically created by GitHub Actions._
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Deployment Summary
       if: steps.check-npm.outputs.exists == 'false'
