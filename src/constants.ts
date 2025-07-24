@@ -1,10 +1,11 @@
 // API Configuration
-export const API_BASE_URL = 'https://api.smartcheckout.dev';
+// export const API_BASE_URL = 'https://api.smartcheckout.dev';
+export const API_BASE_URL = 'http://localhost:8080';
 
 // API Endpoints
 export const API_ENDPOINTS = {
-  PROVIDER_CONFIG: '/v0/company/provider-config',
-  CREDIT_CARD_TOKENS: '/v0/company/credit-card-tokens'
+  PROVIDER_CONFIG: '/provider-config',
+  CREDIT_CARD_TOKENS: '/credit-card-tokens'
 } as const;
 
 // VGS Configuration

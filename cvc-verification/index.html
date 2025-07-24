@@ -526,8 +526,11 @@
                                     resolve(result);
                                     
                                 } catch (error) {
-                                    // this.showStatus(`Verification failed: ${error.message}`, 'error'); // For debugging
-                                    this.showStatus(`Verification failed: There was an error with the verification process. Please try again.`, 'error');
+                                    if (error.message.toLowerCase().includes('verification code')) {
+                                        this.showStatus(`Verification failed: ${error.message}`, 'error');
+                                    } else {
+                                        this.showStatus(`Verification failed: There was an error with the verification process. Please try again.`, 'error');
+                                    }
                                     reject(error);
                                 }
                             } else if (!status) {
@@ -547,9 +550,7 @@
                     });
                     
                 } catch (error) {
-                    console.error('CVC submission error:', error);
-                    // this.showStatus(`Verification failed: ${error.message}`, 'error'); // For debugging
-                    this.showStatus(`Verification failed: There was an error with the verification process. Please try again.`, 'error');
+                    this.showStatus(`Verification failed: ${error.message}`, 'error');
                 } finally {
                     this.submitBtn.disabled = false;
                 }
@@ -562,7 +563,7 @@
                     cvc: vgsData.card_cvc
                 };
                 
-                const response = await fetch(`${this.getApiBaseUrl()}/v0/company/update-cvc`, {
+                const response = await fetch(`${this.getApiBaseUrl()}/update-cvc`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
