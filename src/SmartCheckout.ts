@@ -17,13 +17,13 @@ import {
 } from './constants';
 
 class SmartCheckout {
-  private apiKey: string;
+  private publishableKey: string;
   protected config: VGSConfig | null = null;
   protected vgsForm: VGSForm | null = null;
 
   // Getter methods for child classes
-  getApiKey(): string {
-    return this.apiKey;
+  getPublishableKey(): string {
+    return this.publishableKey;
   }
 
   getConfig(): VGSConfig | null {
@@ -38,12 +38,12 @@ class SmartCheckout {
     return this._initializeConfig();
   }
 
-  constructor(apiKey: string) {
-    if (!apiKey) {
+  constructor(publishableKey: string) {
+    if (!publishableKey) {
       throw new Error('API key is required');
     }
     
-    this.apiKey = apiKey;
+    this.publishableKey = publishableKey;
   }
 
   /**
@@ -55,7 +55,7 @@ class SmartCheckout {
 
     try {
       
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PROVIDER_CONFIG}?api_key=${encodeURIComponent(this.apiKey)}`, {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PROVIDER_CONFIG}?publishable_key=${encodeURIComponent(this.publishableKey)}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -139,7 +139,7 @@ class CreditCardForm {
   private smartcheckout: SmartCheckout;
   private vgsForm: VGSForm;
   private config: VGSConfig;
-  private apiKey: string;
+  private publishableKey: string;
   
   // Form options
   private onSuccess: (result: CardTokenResult) => void;
@@ -157,7 +157,7 @@ class CreditCardForm {
     this.smartcheckout = smartcheckout;
     this.vgsForm = smartcheckout.getVgsForm()!;
     this.config = smartcheckout.getConfig()!;
-    this.apiKey = smartcheckout.getApiKey();
+    this.publishableKey = smartcheckout.getPublishableKey();
     
     // Form options
     this.onSuccess = options.onSuccess || (() => {});
@@ -468,7 +468,7 @@ class CreditCardForm {
       const dataToSend = {
         ...transformedData,
         email: email,
-        api_key: this.apiKey
+        publishable_key: this.publishableKey
       };
       
       
