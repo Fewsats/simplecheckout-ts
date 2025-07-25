@@ -1,0 +1,15 @@
+{
+  "name": "smartcheckout-example",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "start": "vite build && npx serve dist -p ${PORT:-3000}"
+  },
+  "dependencies": {
+    "@smartcheckout/sdk": "file:.."
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+} 

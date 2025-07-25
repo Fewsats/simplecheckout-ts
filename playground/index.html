@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCheckout Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .instructions {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .instructions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .api-key-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .api-key-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+        .api-key-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: monospace;
+        }
+        .api-key-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        .init-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        .init-button:hover {
+            background-color: #0056b3;
+        }
+        .init-button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .form-container {
+            margin-top: 20px;
+            min-height: 200px;
+            border: 2px dashed #dee2e6;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container.active {
+            border: none;
+            padding: 0;
+        }
+        .placeholder-text {
+            color: #6c757d;
+            text-align: center;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: 500;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        /* Override the narrow form width */
+        #checkout-container .container {
+            max-width: 100% !important;
+            padding: 32px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SmartCheckout Demo</h1>
+        <p class="subtitle">Test the SmartCheckout credit card tokenization flow</p>
+        
+        <div class="instructions">
+            <h3>How to use:</h3>
+            <ul>
+                <li>Enter your API key below (or pass it via URL parameter: ?apiKey=your_key)</li>
+                <li>Click "Initialize Form" to load the secure payment form</li>
+                <li>Fill in the credit card details and email</li>
+                <li>The form will automatically submit when all fields are complete</li>
+            </ul>
+        </div>
+
+        <div class="api-key-section">
+            <label for="api-key">API Key:</label>
+            <input 
+                type="text" 
+                id="api-key" 
+                class="api-key-input" 
+                placeholder="Enter your API key (e.g., sk_test_...)"
+            />
+            <button id="init-btn" class="init-button">Initialize Form</button>
+        </div>
+        
+        <div class="form-container" id="checkout-container">
+            <div class="placeholder-text">
+                Enter your API key above and click "Initialize Form" to begin
+            </div>
+        </div>
+        
+        <div id="status" class="status info">
+            Ready to initialize...
+        </div>
+    </div>
+
+    <script type="module">
+        import SmartCheckout from '../dist/SmartCheckout.js';
+        
+        let smartcheckout = null;
+        let creditCardForm = null;
+        
+        const statusEl = document.getElementById('status');
+        const apiKeyInput = document.getElementById('api-key');
+        const initBtn = document.getElementById('init-btn');
+        const checkoutContainer = document.getElementById('checkout-container');
+        
+        function updateStatus(message, type = 'info') {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        async function initializeForm(apiKey) {
+            try {
+                updateStatus('Initializing SmartCheckout...', 'info');
+                
+                // Clear any existing form
+                checkoutContainer.innerHTML = '';
+                checkoutContainer.classList.add('active');
+                
+                smartcheckout = new SmartCheckout(apiKey);
+                
+                creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
+                    onSuccess: (result) => {
+                        updateStatus(`Success! Token: ${result.token}`, 'success');
+                        console.log('Card stored successfully:', result);
+                    },
+                    onError: (error) => {
+                        updateStatus(`Error: ${error.message}`, 'error');
+                        console.error('Error storing card:', error);
+                    }
+                });
+                
+                creditCardForm.mount('#checkout-container');
+                updateStatus('Form loaded successfully! Fill in your card details.', 'success');
+                
+            } catch (error) {
+                updateStatus(`Initialization error: ${error.message}`, 'error');
+                console.error('Initialization error:', error);
+                checkoutContainer.innerHTML = '<div class="placeholder-text">Failed to load form. Please check your API key.</div>';
+                checkoutContainer.classList.remove('active');
+            }
+        }
+        
+        // Check URL parameters on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlApiKey = urlParams.get('apiKey');
+            
+            if (urlApiKey) {
+                apiKeyInput.value = urlApiKey;
+                updateStatus('API key loaded from URL. Click "Initialize Form" to begin.', 'info');
+            }
+        });
+        
+        // Initialize button click handler
+        initBtn.addEventListener('click', () => {
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                updateStatus('Please enter an API key', 'error');
+                return;
+            }
+            
+            initializeForm(apiKey);
+        });
+        
+        // Allow Enter key to initialize form
+        apiKeyInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                initBtn.click();
+            }
+        });
+    </script>
+</body>
+</html> 
