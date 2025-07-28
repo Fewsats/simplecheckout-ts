@@ -55,7 +55,7 @@ class SmartCheckout {
 
     try {
       
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PROVIDER_CONFIG}?api_key=${encodeURIComponent(this.apiKey)}`, {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PROVIDER_CONFIG}?publishable_key=${encodeURIComponent(this.apiKey)}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
