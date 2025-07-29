@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
   root: '.',
@@ -11,5 +12,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['@vgs/collect-js']
+  },
+  resolve: {
+    alias: {
+      '../dist/SmartCheckout.js': resolve(__dirname, '../src/SmartCheckout.ts')
+    }
   }
 }); 
