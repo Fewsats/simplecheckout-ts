@@ -333,7 +333,7 @@ class CreditCardForm {
     if (!this.container) return;
 
     this.container.innerHTML = `
-      <div class="container">
+      <div class="smartcheckout-container">
         <form id="smartcheckout-form">
           <div class="form-section">
             <label>Email</label>
@@ -468,7 +468,7 @@ class CreditCardForm {
       const dataToSend = {
         ...transformedData,
         email: email,
-        api_key: this.apiKey
+        publishable_key: this.apiKey
       };
       
       
@@ -556,7 +556,7 @@ class CreditCardForm {
   private _getDefaultStyling(): FieldStyling {
     return {
       boxSizing: 'border-box',
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       fontSize: '15px',
       color: '#374151',
       backgroundColor: 'transparent',
@@ -587,21 +587,16 @@ class CreditCardForm {
     const style = document.createElement('style');
     style.id = 'smartcheckout-styles';
     style.textContent = `
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-      
-      * {
+      .smartcheckout-container {
         box-sizing: border-box;
       }
 
-      html {
-        font-size: 16px;
+      .smartcheckout-container * {
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       }
 
-      * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      }
-
-      iframe {
+      .smartcheckout-container iframe {
         width: 100%;
         height: 100%;
         border: none;
@@ -627,7 +622,7 @@ class CreditCardForm {
         box-sizing: border-box !important;
       }
 
-      .container {
+      .smartcheckout-container {
         max-width: 480px;
         margin: 0 auto;
         background-color: #ffffff;
@@ -638,7 +633,7 @@ class CreditCardForm {
         position: relative;
       }
 
-      form {
+      .smartcheckout-container form {
         max-width: 100%;
         margin: 0;
       }
@@ -659,7 +654,7 @@ class CreditCardForm {
         margin-bottom: 24px;
       }
 
-      label {
+      .smartcheckout-container label {
         display: block;
         font-size: 15px;
         margin-bottom: 10px;
@@ -698,7 +693,7 @@ class CreditCardForm {
         border: 1px solid #e5e5e5;
         padding: 14px 16px;
         background-color: #ffffff;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         font-size: 15px;
         color: #374151;
         box-sizing: border-box;
@@ -749,7 +744,7 @@ class CreditCardForm {
         border-top: none;
       }
 
-      button[type="submit"] {
+      .smartcheckout-container button[type="submit"] {
         width: 100%;
         height: 48px;
         margin-top: 8px;
@@ -757,7 +752,7 @@ class CreditCardForm {
         padding: 0 24px;
         font-size: 15px;
         font-weight: 500;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         color: #ffffff;
         background: #4CA6E6;
         border: none;
@@ -769,18 +764,18 @@ class CreditCardForm {
         letter-spacing: -0.1px;
       }
 
-      button[type="submit"]:hover:not(:disabled) {
+      .smartcheckout-container button[type="submit"]:hover:not(:disabled) {
         background: #3d95d9;
         transform: translateY(-1px);
         box-shadow: 0 8px 16px rgba(76, 166, 230, 0.25);
       }
 
-      button[type="submit"]:active:not(:disabled) {
+      .smartcheckout-container button[type="submit"]:active:not(:disabled) {
         transform: translateY(0);
         box-shadow: 0 4px 8px rgba(76, 166, 230, 0.25);
       }
 
-      button[type="submit"]:disabled {
+      .smartcheckout-container button[type="submit"]:disabled {
         background: #f5f5f5;
         color: #8a8a8a;
         cursor: not-allowed;
@@ -897,12 +892,12 @@ class CreditCardForm {
 
       /* Responsive design */
       @media (max-width: 480px) {
-        .container {
+        .smartcheckout-container {
           margin: 10px;
           padding: 20px;
         }
         
-        form {
+        .smartcheckout-container form {
           margin: 10px auto;
         }
         
