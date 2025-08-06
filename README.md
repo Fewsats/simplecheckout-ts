@@ -10,9 +10,10 @@ npm install smartcheckout-sdk
 
 ## Quick Start
 
+### Credit Card Form
+
 ```javascript
 import SmartCheckout from 'smartcheckout-sdk';
-
 
 // Initialize SmartCheckout with your publishable key
 const smartcheckout = new SmartCheckout('pk_sandbox_xxxx');
@@ -29,18 +30,38 @@ const creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
 });
 
 // Mount the form to a container
-creditCardForm.mount('#checkout-container');
+creditCardForm.mount('#container');
 ```
 
-### 2. HTML Setup
+### CVC Verification Form
+
+```javascript
+// Initialize SmartCheckout with your publishable key
+const smartcheckout = new SmartCheckout('pk_sandbox_xxxx');
+
+// Create and mount a CVC verification form
+const cvcForm = await smartcheckout.initCVCVerificationForm({
+  code: 'verification_code_from_url',
+  onSuccess: (result) => {
+    console.log('CVC verified successfully!');
+  },
+  onError: (error) => {
+    console.error('Verification failed:', error.message);
+  }
+});
+
+// Mount the form to a container
+cvcForm.mount('#container');
+```
+
+### HTML Setup
 
 ```html
 <!-- Just provide a container element -->
-<div id="checkout-container"></div>
+<div id="container"></div>
 ```
 
 That's it! The SmartCheckout package will handle everything else.
-
 
 ## API Reference
 
