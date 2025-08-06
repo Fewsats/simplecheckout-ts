@@ -1,47 +1,30 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { copyFileSync } from 'fs';
 
 export default defineConfig({
   root: '.',
-  base: './', // Relative paths for CDN deployment
   server: {
     port: 3001,
-    open: true
+    open: false
   },
   build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    // Optimize for CDN deployment
-    minify: 'terser',
-    sourcemap: false, // Disable sourcemaps for production
-    rollupOptions: {
-      // Configure multiple HTML entry points
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        success: resolve(__dirname, 'verification-success.html')
-      },
-      output: {
-        // Optimize chunk splitting for CDN caching
-        manualChunks: {
-          'vgs-collect': ['@vgs/collect-js']
-        },
-        // Add cache busting to filenames
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash].[ext]'
-      }
-    },
-    // Optimize assets
-    assetsInlineLimit: 4096, // Inline small assets
-    // Enable compression
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console.logs in production
-        drop_debugger: true
-      }
-    }
+    outDir: 'dist'
   },
   optimizeDeps: {
     include: ['@vgs/collect-js']
-  }
+  },
+  resolve: {
+    alias: {
+      '../dist/SmartCheckout.js': resolve(__dirname, '../src/SmartCheckout.ts')
+    }
+  },
+  plugins: [
+    {
+      name: 'copy-verification-success',
+      writeBundle() {
+        copyFileSync('./verification-success.html', './dist/verification-success.html');
+      }
+    }
+  ]
 }); 
