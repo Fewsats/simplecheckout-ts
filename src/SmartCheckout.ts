@@ -142,6 +142,7 @@ class SmartCheckout {
   async initCVCVerificationForm(options: CVCVerificationFormOptions): Promise<CVCVerificationForm> {
     await this._initializeVGS();
     return new CVCVerificationForm(this, options);
+
   }
 }
 

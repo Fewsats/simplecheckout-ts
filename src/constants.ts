@@ -1,5 +1,4 @@
 // API Configuration
-// export const API_BASE_URL = 'https://api.smartcheckout.dev';
 export const API_BASE_URL = import.meta.env?.VITE_GO_BACKEND_URL || 'http://localhost:8080';
 
 // API Endpoints
