@@ -34,7 +34,7 @@ export class CreditCardForm {
     this.smartcheckout = smartcheckout;
     this.vgsForm = smartcheckout.getVgsForm()!;
     this.config = smartcheckout.getConfig()!;
-    this.publishableKey = smartcheckout.getApiKey();
+    this.publishableKey = smartcheckout.getPublishableKey();
     
     // Form options
     this.onSuccess = options.onSuccess || (() => {});

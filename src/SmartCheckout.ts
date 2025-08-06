@@ -22,7 +22,7 @@ class SmartCheckout {
   protected vgsForm: VGSForm | null = null;
 
   // Getter methods for child classes
-  getApiKey(): string {
+  getPublishableKey(): string {
     return this.publishableKey;
   }
 
