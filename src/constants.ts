@@ -5,7 +5,8 @@ export const API_BASE_URL = import.meta.env?.VITE_GO_BACKEND_URL || 'http://loca
 // API Endpoints
 export const API_ENDPOINTS = {
   PROVIDER_CONFIG: '/provider-config',
-  CREDIT_CARD_TOKENS: '/credit-card-tokens'
+  CREDIT_CARD_TOKENS: '/credit-card-tokens',
+  UPDATE_CVC: '/update-cvc'
 } as const;
 
 // VGS Configuration

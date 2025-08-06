@@ -20,6 +20,7 @@
     "start": "vite",
     "playground": "cd playground && npm start",
     "playground:dev": "cd playground && npm run dev",
+    "cvc:dev": "cd cvc-verification && npm run dev",
     "type-check": "tsc --noEmit",
     "pack:test": "npm run build:package && npm pack",
     "prepublishOnly": "npm run build:package",

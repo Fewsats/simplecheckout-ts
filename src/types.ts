@@ -105,4 +105,18 @@ export interface FormState {
   isEmailValid: boolean;
 }
 
+// CVC Verification types
+export interface CVCVerificationFormOptions {
+  code: string; // The verification code from URL params
+  onSuccess?: (result: CVCVerificationResult) => void;
+  onError?: (error: Error) => void;
+  styling?: FieldStyling;
+}
+
+export interface CVCVerificationResult {
+  success: boolean;
+  message: string;
+  code: string; // The verification code that was processed
+}
+
  

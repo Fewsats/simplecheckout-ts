@@ -403,13 +403,14 @@
     </div>
 
     <script type="module">
-        import { loadVGSCollect } from '@vgs/collect-js';
+        import SmartCheckout from '../dist/SmartCheckout.js';
         
         class CVCVerificationPage {
             constructor() {
-                this.vgsForm = null;
-                this.cvcField = null;
+                this.smartcheckout = null;
+                this.cvcVerificationForm = null;
                 this.code = '';
+                this.apiKey = '';
 
                 
                 this.loadingContent = document.getElementById('loading-content');
@@ -428,10 +429,15 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     
                     this.code = urlParams.get('code') || '';
+                    this.apiKey = urlParams.get('publishable_key') || '';
                     
                     // Validate required parameters
                     if (!this.code) {
                         throw new Error('Code parameter is required');
+                    }
+                    
+                    if (!this.apiKey) {
+                        throw new Error('Publishable key parameter is required');
                     }
                     
                     // Validate code format (basic check)
@@ -439,7 +445,7 @@
                         throw new Error('Invalid verification code');
                     }
                     
-                    // Initialize VGS and form directly
+                    // Initialize SmartCheckout SDK and form
                     await this.initializeForm();
                     
                     // Show verification content
@@ -459,37 +465,37 @@
             
             async initializeForm() {
                 try {
-                    // Get VGS configuration from environment variables
-                    const vgsConfig = this.getVGSConfigFromEnv();
+                    // Clear the container
+                    const container = document.getElementById('verification-content');
+                    container.innerHTML = '';
                     
-                    // Initialize VGS Collect
-                    const collect = await loadVGSCollect({
-                        vaultId: vgsConfig.vaultId,
-                        environment: vgsConfig.environment,
-                        version: vgsConfig.version
+                    // Initialize SmartCheckout SDK
+                    this.smartcheckout = new SmartCheckout(this.apiKey);
+                    
+                    // Initialize CVC verification form
+                    this.cvcVerificationForm = await this.smartcheckout.initCVCVerificationForm({
+                        code: this.code,
+                        onSuccess: (result) => {
+                            this.showStatus('CVC verified successfully!', 'success');
+                            console.log('CVC verification successful:', result);
+                            
+                            // Redirect to success page after a delay
+                            setTimeout(() => {
+                                window.location.href = './verification-success.html';
+                            }, 2000);
+                        },
+                        onError: (error) => {
+                            if (error.message.toLowerCase().includes('verification code')) {
+                                this.showStatus(`Verification failed: ${error.message}`, 'error');
+                            } else {
+                                this.showStatus('Verification failed: There was an error with the verification process. Please try again.', 'error');
+                            }
+                            console.error('CVC verification error:', error);
+                        }
                     });
                     
-                    // Initialize VGS form
-                    this.vgsForm = collect.init((state) => {
-                        // Update form status when VGS state changes
-                        this.updateFormStatus(state);
-                    });
-                    
-                    // Set route ID
-                    this.vgsForm.setRouteId(vgsConfig.routeId);
-                    
-                    // Create CVC field
-                    this.cvcField = this.vgsForm.field('#sc-cvc', {
-                        type: 'card-security-code',
-                        name: 'card_cvc',
-                        placeholder: '123',
-                        showCardIcon: true,
-                        validations: ['required', 'validCardSecurityCode'],
-                        css: this.getFieldStyling()
-                    });
-                    
-                    // Setup form submission
-                    this.setupFormSubmission();
+                    // Mount the form to the container
+                    this.cvcVerificationForm.mount('#verification-content');
                     
                 } catch (error) {
                     console.error('Form initialization error:', error);
@@ -497,96 +503,7 @@
                 }
             }
             
-            setupFormSubmission() {
-                this.cvcForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    await this.submitCVC();
-                });
-            }
-            
-            async submitCVC() {
-                try {
-                    this.showStatus('Verifying CVC...', 'loading');
-                    this.submitBtn.disabled = true;
-                    
-                    return new Promise((resolve, reject) => {
-                        this.vgsForm.submit('/post', {}, async (status, data) => {
-                            if (status >= 200 && status <= 300) {
-                                try {
-                                    // Send CVC data to backend for verification
-                                    const result = await this.updateCVC(data);
-                                    
-                                    this.showStatus('CVC verified successfully!', 'success');
-                                    
-                                    // Redirect to success page or show success message
-                                    setTimeout(() => {
-                                        window.location.href = './verification-success.html';
-                                    }, 5000);
-                                    
-                                    resolve(result);
-                                    
-                                } catch (error) {
-                                    if (error.message.toLowerCase().includes('verification code')) {
-                                        this.showStatus(`Verification failed: ${error.message}`, 'error');
-                                    } else {
-                                        this.showStatus(`Verification failed: There was an error with the verification process. Please try again.`, 'error');
-                                    }
-                                    reject(error);
-                                }
-                            } else if (!status) {
-                                const error = new Error('Network error occurred');
-                                this.showStatus('Network error occurred. Please try again.', 'error');
-                                reject(error);
-                            } else {
-                                const error = new Error(`Server error (${status})`);
-                                this.showStatus(`Server error (${status}). Please try again.`, 'error');
-                                reject(error);
-                            }
-                        }, (validationError) => {
-                            const error = new Error('Please enter a valid CVC code');
-                            this.showStatus('Please enter a valid CVC code.', 'error');
-                            reject(error);
-                        });
-                    });
-                    
-                } catch (error) {
-                    this.showStatus(`Verification failed: ${error.message}`, 'error');
-                } finally {
-                    this.submitBtn.disabled = false;
-                }
-            }
-            
-            async updateCVC(vgsData) {
-                // Extract CVC from VGS data and map to correct field name
-                const requestBody = {
-                    code: this.code,
-                    cvc: vgsData.card_cvc
-                };
-                
-                const response = await fetch(`${this.getApiBaseUrl()}/update-cvc`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-                
-                const result = await response.json();
-                
-                if (!response.ok) {
-                    if (response.status >= 400 && response.status < 500 && result.error) {
-                        throw new Error(result.error);
-                    }
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                return result;
-            }
-            
-            updateFormStatus(state) {
-                // Button is always enabled, no validation logic
-                this.submitBtn.disabled = false;
-            }
+            // These methods are no longer needed as the SDK handles form submission
             
             showVerificationContent() {
                 this.loadingContent.style.display = 'none';
@@ -603,71 +520,11 @@
             }
             
             showStatus(message, type = 'info') {
-                this.statusMessage.textContent = message;
-                this.statusMessage.className = `status-message ${type}`;
-                
-                if (type === 'success') {
-                    setTimeout(() => {
-                        this.statusMessage.textContent = '';
-                        this.statusMessage.className = 'status-message';
-                    }, 5000);
-                }
+                // The SDK now handles status messages internally
+                console.log(`[${type}] ${message}`);
             }
             
-            getFieldStyling() {
-                return {
-                    boxSizing: 'border-box',
-                    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                    fontSize: '15px',
-                    color: '#374151',
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    outline: 'none',
-                    width: '100%',
-                    height: '100%',
-                    padding: '4px 8px',
-                    fontWeight: '400',
-                    '&::placeholder': {
-                        color: '#8a8a8a',
-                        fontWeight: '400'
-                    }
-                };
-            }
-            
-            getVGSConfigFromEnv() {
-                // Get VGS configuration from environment variables
-                const vaultId = import.meta.env.VITE_VGS_VAULT_ID;
-                const environment = import.meta.env.VITE_VGS_ENVIRONMENT;
-                const routeId = import.meta.env.VITE_VGS_ROUTE_ID;
-                const version = import.meta.env.VITE_VGS_VERSION || '3.1.0';
-                
-                // Validate required environment variables
-                if (!vaultId) {
-                    throw new Error('VGS_VAULT_ID environment variable is required');
-                }
-                
-                if (!environment) {
-                    throw new Error('VGS_ENVIRONMENT environment variable is required');
-                }
-                
-                if (!routeId) {
-                    throw new Error('VGS_ROUTE_ID environment variable is required');
-                }
-                
-                const vgsConfig = {
-                    vaultId,
-                    environment,
-                    routeId,
-                    version
-                };
-                
-                return vgsConfig;
-            }
-            
-            getApiBaseUrl() {
-                // Use environment variable for API base URL, fallback to localhost for development
-                return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-            }
+            // These configuration methods are no longer needed as the SDK handles them
         }
         
         // Initialize the page when DOM is loaded
