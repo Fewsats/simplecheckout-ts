@@ -22,7 +22,7 @@
             justify-content: center;
         }
 
-        .container {
+        .verification-container {
             background: #ffffff;
             border-radius: 12px;
             border: 1px solid #f0f0f0;
@@ -236,27 +236,12 @@
 
         <h1>CVC Verification Successful!</h1>
         <p class="message">
-            Your card security code has been verified successfully. Your transaction is now complete.
+            Your card security code has been verified successfully.
         </p>
-
-        <div class="email-display" id="email-display">
-            <!-- Email will be populated here -->
-        </div>
-
-        <div class="next-steps">
-            <h3>What happens next?</h3>
-            <ul>
-                <li>Your transaction will be processed within the next few minutes</li>
-                <li>You'll receive a confirmation email with transaction details</li>
-                <li>Your card information is securely stored for future use</li>
-                <li>You can close this window and return to your account</li>
-            </ul>
-        </div>
-
-        <div class="action-buttons">
-            <button class="btn btn-secondary" onclick="window.close()">Close Window</button>
-        </div>
-
+        <p class="message">
+            You can close this window.
+        </p>
+       
         <div class="logo">
             <svg class="smartcheckout-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M11.7172 28.509L3 23.496V19.6072L11.7172 24.6206L20.4341 19.6072V23.496L11.7172 28.509Z" fill="#4CA6E6"/>
@@ -269,33 +254,5 @@
             <span class="logo-text">by SmartCheckout</span>
         </div>
     </div>
-
-    <script>
-        // Get email from URL parameters or localStorage
-        function getEmailFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('email');
-        }
-
-        function getEmailFromLocalStorage() {
-            return localStorage.getItem('cvc_verification_email');
-        }
-
-        function displayEmail() {
-            const email = getEmailFromUrl() || getEmailFromLocalStorage();
-            const emailDisplay = document.getElementById('email-display');
-            
-            if (email) {
-                emailDisplay.textContent = email;
-            } else {
-                emailDisplay.style.display = 'none';
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', () => {
-            displayEmail();
-        });
-    </script>
 </body>
 </html> 

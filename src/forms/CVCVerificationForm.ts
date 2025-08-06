@@ -183,7 +183,7 @@ export class CVCVerificationForm {
 
         <h1>Verification Required</h1>
         <p class="subtitle">
-          For your security, we need to verify your card's CVC code to complete this transaction.
+          For your security, we need to verify your card's CVC code.
         </p>
 
         <form id="cvc-form">
