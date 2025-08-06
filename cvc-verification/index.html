@@ -429,15 +429,10 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     
                     this.code = urlParams.get('code') || '';
-                    this.apiKey = urlParams.get('publishable_key') || '';
                     
                     // Validate required parameters
                     if (!this.code) {
                         throw new Error('Code parameter is required');
-                    }
-                    
-                    if (!this.apiKey) {
-                        throw new Error('Publishable key parameter is required');
                     }
                     
                     // Validate code format (basic check)
@@ -445,7 +440,7 @@
                         throw new Error('Invalid verification code');
                     }
                     
-                    // Check verification code status first
+                    // Check verification code status and get publishable key
                     await this.checkVerificationCode();
                     
                     // Initialize SmartCheckout SDK and form
@@ -481,7 +476,13 @@
                         }
                     }
                     
-                    console.log('Verification code is valid');
+                    // Extract the publishable key from the response
+                    if (!result.publishable_key) {
+                        throw new Error('Publishable key not found for this verification code');
+                    }
+                    
+                    this.apiKey = result.publishable_key;
+                    console.log('Verification code is valid, publishable key retrieved');
                     
                 } catch (error) {
                     console.error('Verification code check failed:', error);
