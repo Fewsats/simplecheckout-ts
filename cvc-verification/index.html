@@ -445,6 +445,9 @@
                         throw new Error('Invalid verification code');
                     }
                     
+                    // Check verification code status first
+                    await this.checkVerificationCode();
+                    
                     // Initialize SmartCheckout SDK and form
                     await this.initializeForm();
                     
@@ -455,6 +458,40 @@
                     console.error('Initialization error:', error);
                     this.showError(error.message);
                 }
+            }
+            
+            async checkVerificationCode() {
+                try {
+                    const apiBaseUrl = this.getApiBaseUrl();
+                    const response = await fetch(`${apiBaseUrl}/verification-code-info?code=${encodeURIComponent(this.code)}`);
+                    const result = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Failed to check verification code');
+                    }
+                    
+                    // Handle different verification code states
+                    if (!result.valid) {
+                        if (result.expired) {
+                            throw new Error('Verification code has expired');
+                        } else if (result.used) {
+                            throw new Error('Verification code has already been used');
+                        } else {
+                            throw new Error('Invalid verification code');
+                        }
+                    }
+                    
+                    console.log('Verification code is valid');
+                    
+                } catch (error) {
+                    console.error('Verification code check failed:', error);
+                    throw error;
+                }
+            }
+            
+            getApiBaseUrl() {
+                // Use environment variable for API base URL, fallback to localhost for development
+                return import.meta.env.VITE_GO_BACKEND_URL || 'http://localhost:8080';
             }
             
             showVerificationContent() {
