@@ -207,7 +207,6 @@
                     }
                     
                     this.publishableKey = result.publishable_key;
-                    console.log('Verification code is valid, publishable key retrieved');
                     
                 } catch (error) {
                     console.error('Verification code check failed:', error);
@@ -240,7 +239,6 @@
                     this.cvcVerificationForm = await this.smartcheckout.initCVCVerificationForm({
                         code: this.code,
                         onSuccess: (result) => {
-                            console.log('CVC verification successful:', result);
                             
                             // Redirect to success page after a delay
                             setTimeout(() => {
