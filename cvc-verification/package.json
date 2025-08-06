@@ -1,34 +1,16 @@
 {
-  "name": "cvc-verification-page",
+  "name": "smartcheckout-cvc-verification",
   "version": "1.0.0",
-  "description": "CVC verification page for SmartCheckout users",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:staging": "vite build --mode staging",
-    "build:production": "vite build --mode production",
-    "build:cdn": "npm run build:production && npm run optimize-assets",
-    "preview": "vite preview",
-    "optimize-assets": "echo 'Assets optimized for CDN deployment'",
-    "r2:create-bucket": "wrangler r2 bucket create cvc-verification-assets",
-    "r2:create-bucket-staging": "wrangler r2 bucket create cvc-verification-assets-staging",
-    "r2:deploy": "npm run build:production && node scripts/deploy-r2.js",
-    "r2:deploy-staging": "R2_BUCKET_NAME=cvc-verification-assets-staging ENVIRONMENT=staging npm run build:staging && node scripts/deploy-r2.js",
-    "r2:setup": "npm run r2:create-bucket && npm run r2:create-bucket-staging",
-    "cf:login": "wrangler login",
-    "cf:deploy": "npm run r2:deploy",
-    "deploy": "./scripts/deploy.sh",
-    "deploy:prod": "NODE_ENV=production ./scripts/deploy.sh"
+    "start": "npm run build && npx serve dist -p ${PORT:-3000}"
   },
   "dependencies": {
-    "@vgs/collect-js": "^0.7.2"
+    "@smartcheckout/sdk": "file:.."
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "typescript": "^5.0.0",
-    "terser": "^5.19.0",
-    "vite-plugin-compression": "^0.5.1",
-    "wrangler": "^3.0.0"
+    "vite": "^5.0.0"
   }
 } 
