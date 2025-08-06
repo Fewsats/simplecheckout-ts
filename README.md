@@ -124,6 +124,51 @@ Updates the form styling.
 
 **Returns:** CreditCardForm - Returns self for chaining
 
+### smartcheckout.initCVCVerificationForm(options)
+
+Creates a new CVC verification form.
+
+**Parameters:**
+- `options` (object) - Form configuration options
+
+**Options:**
+- `code` (string, required) - The verification code from the URL
+- `onSuccess` (function) - Callback when CVC is verified successfully
+- `onError` (function) - Callback when verification fails
+- `styling` (object) - Custom field styling (optional)
+
+**Returns:** Promise<CVCVerificationForm> - The CVC verification form instance
+
+### cvcVerificationForm.mount(selector)
+
+Mounts the form to a container element.
+
+**Parameters:**
+- `selector` (string) - CSS selector for the container element
+
+**Returns:** CVCVerificationForm - Returns self for chaining
+
+### cvcVerificationForm.unmount()
+
+Unmounts the form from its container.
+
+**Returns:** CVCVerificationForm - Returns self for chaining
+
+### cvcVerificationForm.submit()
+
+Submits the form programmatically.
+
+**Returns:** Promise<CVCVerificationResult> - Promise resolving to the verification result
+
+### cvcVerificationForm.updateStyling(styling)
+
+Updates the form styling.
+
+**Parameters:**
+- `styling` (object) - New styling options
+
+**Returns:** CVCVerificationForm - Returns self for chaining
+
 
 ## License
 
