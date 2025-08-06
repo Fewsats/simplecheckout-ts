@@ -15,7 +15,7 @@ export class CVCVerificationForm {
   private smartcheckout: SmartCheckout;
   private vgsForm: VGSForm;
   private config: VGSConfig;
-  private apiKey: string;
+  private publishableKey: string;
   
   // Form options
   private code: string;
@@ -32,7 +32,7 @@ export class CVCVerificationForm {
     this.smartcheckout = smartcheckout;
     this.vgsForm = smartcheckout.getVgsForm()!;
     this.config = smartcheckout.getConfig()!;
-    this.apiKey = smartcheckout.getApiKey();
+    this.publishableKey = smartcheckout.getApiKey();
     
     // Form options
     this.code = options.code;

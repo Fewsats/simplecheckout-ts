@@ -14,8 +14,8 @@ npm install smartcheckout-sdk
 import SmartCheckout from 'smartcheckout-sdk';
 
 
-// Initialize SmartCheckout with your API key
-const smartcheckout = new SmartCheckout('sk_test_your_api_key_here');
+// Initialize SmartCheckout with your publishable key
+const smartcheckout = new SmartCheckout('pk_sandbox_xxxx');
 
 // Create and mount a credit card form
 const creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
@@ -44,12 +44,12 @@ That's it! The SmartCheckout package will handle everything else.
 
 ## API Reference
 
-### SmartCheckout(apiKey)
+### SmartCheckout(publishableKey)
 
 Creates a new SmartCheckout instance.
 
 **Parameters:**
-- `apiKey` (string, required) - Your SmartCheckout API key
+- `publishableKey` (string, required) - Your SmartCheckout publishable key
 
 **Returns:** SmartCheckout instance
 

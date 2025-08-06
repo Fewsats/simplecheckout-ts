@@ -180,7 +180,7 @@
         let creditCardForm = null;
         
         const statusEl = document.getElementById('status');
-        const apiKeyInput = document.getElementById('api-key');
+        const publishableKeyInput = document.getElementById('api-key');
         const initBtn = document.getElementById('init-btn');
         const checkoutContainer = document.getElementById('checkout-container');
         
@@ -189,7 +189,7 @@
             statusEl.className = `status ${type}`;
         }
         
-        async function initializeForm(apiKey) {
+        async function initializeForm(publishableKey) {
             try {
                 updateStatus('Initializing SmartCheckout...', 'info');
                 
@@ -197,7 +197,7 @@
                 checkoutContainer.innerHTML = '';
                 checkoutContainer.classList.add('active');
                 
-                smartcheckout = new SmartCheckout(apiKey);
+                smartcheckout = new SmartCheckout(publishableKey);
                 
                 creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
                     onSuccess: (result) => {
@@ -224,28 +224,28 @@
         // Check URL parameters on load
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const urlApiKey = urlParams.get('publishable_key');
+            const urlPublishableKey = urlParams.get('publishable_key');
             
-            if (urlApiKey) {
-                apiKeyInput.value = urlApiKey;
+            if (urlPublishableKey) {
+                publishableKeyInput.value = urlPublishableKey;
                 updateStatus('API key loaded from URL. Click "Initialize Form" to begin.', 'info');
             }
         });
         
         // Initialize button click handler
         initBtn.addEventListener('click', () => {
-            const apiKey = apiKeyInput.value.trim();
+            const publishableKey = publishableKeyInput.value.trim();
             
-            if (!apiKey) {
+            if (!publishableKey) {
                 updateStatus('Please enter an API key', 'error');
                 return;
             }
             
-            initializeForm(apiKey);
+            initializeForm(publishableKey);
         });
         
         // Allow Enter key to initialize form
-        apiKeyInput.addEventListener('keypress', (e) => {
+        publishableKeyInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 initBtn.click();
             }

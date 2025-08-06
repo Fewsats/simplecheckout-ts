@@ -44,7 +44,7 @@ export interface VGSCollectInstance {
 
 // SmartCheckout type definitions
 export interface SmartCheckoutOptions {
-  apiKey: string;
+  publishableKey: string;
 }
 
 export interface CreditCardFormOptions {

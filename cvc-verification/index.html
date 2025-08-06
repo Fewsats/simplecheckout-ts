@@ -135,7 +135,7 @@
                 this.smartcheckout = null;
                 this.cvcVerificationForm = null;
                 this.code = '';
-                this.apiKey = '';
+                this.publishableKey = '';
 
                 
                 this.loadingContent = document.getElementById('loading-content');
@@ -206,7 +206,7 @@
                         throw new Error('Publishable key not found for this verification code');
                     }
                     
-                    this.apiKey = result.publishable_key;
+                    this.publishableKey = result.publishable_key;
                     console.log('Verification code is valid, publishable key retrieved');
                     
                 } catch (error) {
@@ -228,13 +228,13 @@
             
             async initializeForm() {
                 try {
-                    // Validate we have the API key
-                    if (!this.apiKey) {
-                        throw new Error('API key not available');
+                    // Validate we have the publishable key
+                    if (!this.publishableKey) {
+                        throw new Error('Publishable key not available');
                     }
                     
                     // Initialize SmartCheckout SDK
-                    this.smartcheckout = new SmartCheckout(this.apiKey);
+                    this.smartcheckout = new SmartCheckout(this.publishableKey);
                     
                     // Initialize CVC verification form
                     this.cvcVerificationForm = await this.smartcheckout.initCVCVerificationForm({

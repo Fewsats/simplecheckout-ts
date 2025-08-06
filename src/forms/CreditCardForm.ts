@@ -16,7 +16,7 @@ export class CreditCardForm {
   private smartcheckout: SmartCheckout;
   private vgsForm: VGSForm;
   private config: VGSConfig;
-  private apiKey: string;
+  private publishableKey: string;
   
   // Form options
   private onSuccess: (result: CardTokenResult) => void;
@@ -34,7 +34,7 @@ export class CreditCardForm {
     this.smartcheckout = smartcheckout;
     this.vgsForm = smartcheckout.getVgsForm()!;
     this.config = smartcheckout.getConfig()!;
-    this.apiKey = smartcheckout.getApiKey();
+    this.publishableKey = smartcheckout.getApiKey();
     
     // Form options
     this.onSuccess = options.onSuccess || (() => {});
@@ -345,7 +345,7 @@ export class CreditCardForm {
       const dataToSend = {
         ...transformedData,
         email: email,
-        publishable_key: this.apiKey
+        publishable_key: this.publishableKey
       };
       
       

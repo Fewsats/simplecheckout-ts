@@ -17,13 +17,13 @@ import { CreditCardForm } from './forms/CreditCardForm';
 import { CVCVerificationForm } from './forms/CVCVerificationForm';
 
 class SmartCheckout {
-  private apiKey: string;
+  private publishableKey: string;
   protected config: VGSConfig | null = null;
   protected vgsForm: VGSForm | null = null;
 
   // Getter methods for child classes
   getApiKey(): string {
-    return this.apiKey;
+    return this.publishableKey;
   }
 
   getConfig(): VGSConfig | null {
@@ -38,12 +38,12 @@ class SmartCheckout {
     return this._initializeConfig();
   }
 
-  constructor(apiKey: string) {
-    if (!apiKey) {
-      throw new Error('API key is required');
+  constructor(publishableKey: string) {
+    if (!publishableKey) {
+      throw new Error('Publishable key is required');
     }
     
-    this.apiKey = apiKey;
+    this.publishableKey = publishableKey;
   }
 
   /**
@@ -55,7 +55,7 @@ class SmartCheckout {
 
     try {
       
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PROVIDER_CONFIG}?publishable_key=${encodeURIComponent(this.apiKey)}`, {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PROVIDER_CONFIG}?publishable_key=${encodeURIComponent(this.publishableKey)}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
