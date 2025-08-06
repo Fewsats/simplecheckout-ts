@@ -111,9 +111,9 @@
                 
                 // Get API key from URL or use a test key
                 const urlParams = new URLSearchParams(window.location.search);
-                const apiKey = urlParams.get('apiKey') || 'sk_test_demo_key';
+                const publishableKey = urlParams.get('publishableKey') || 'sk_sandbox_demo_key';
                 
-                smartcheckout = new SmartCheckout(apiKey);
+                smartcheckout = new SmartCheckout(publishableKey);
                 
                 creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
                     onSuccess: (result) => {
