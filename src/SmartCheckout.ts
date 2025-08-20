@@ -18,6 +18,7 @@ import { CVCVerificationForm } from './forms/CVCVerificationForm';
 
 class SmartCheckout {
   private publishableKey: string;
+  private apiBaseUrl: string;
   protected config: VGSConfig | null = null;
   protected vgsForm: VGSForm | null = null;
 
@@ -44,6 +45,7 @@ class SmartCheckout {
     }
     
     this.publishableKey = publishableKey;
+    this.apiBaseUrl = API_BASE_URL;
   }
 
   /**
@@ -55,7 +57,7 @@ class SmartCheckout {
 
     try {
       
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PROVIDER_CONFIG}?publishable_key=${encodeURIComponent(this.publishableKey)}`, {
+      const response = await fetch(`${this.apiBaseUrl}${API_ENDPOINTS.PROVIDER_CONFIG}?publishable_key=${encodeURIComponent(this.publishableKey)}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
