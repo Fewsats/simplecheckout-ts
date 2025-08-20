@@ -15,7 +15,9 @@ npm install smartcheckout-sdk
 ```javascript
 import SmartCheckout from 'smartcheckout-sdk';
 
-// Initialize SmartCheckout with your publishable key
+// Option A (recommended in SPAs): set meta or global for auto-detection
+// <meta name="smartcheckout:api-base-url" content="https://api.example.com" />
+// or: window.SMARTCHECKOUT_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const smartcheckout = new SmartCheckout('pk_sandbox_xxxx');
 
 // Create and mount a credit card form
@@ -36,7 +38,6 @@ creditCardForm.mount('#container');
 ### CVC Verification Form
 
 ```javascript
-// Initialize SmartCheckout with your publishable key
 const smartcheckout = new SmartCheckout('pk_sandbox_xxxx');
 
 // Create and mount a CVC verification form
@@ -71,6 +72,11 @@ Creates a new SmartCheckout instance.
 
 **Parameters:**
 - `publishableKey` (string, required) - Your SmartCheckout publishable key
+
+The SDK discovers the API base URL at runtime via:
+- A `<meta name="smartcheckout:api-base-url" content="..." />` tag, or
+- `window.SMARTCHECKOUT_API_BASE_URL = '...'`, or
+- A built-in default suitable for local development
 
 **Returns:** SmartCheckout instance
 

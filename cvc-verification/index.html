@@ -215,8 +215,8 @@
             }
             
             getApiBaseUrl() {
-                // Use environment variable for API base URL, fallback to localhost for development
-                return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+                // Use environment variable for API base URL
+                return import.meta.env.VITE_API_BASE_URL;
             }
             
             showVerificationContent() {
@@ -232,10 +232,12 @@
                         throw new Error('Publishable key not available');
                     }
                     
-                    // Initialize SmartCheckout SDK
+                    // Expose API base URL for SDK auto-detection
+                    window.SMARTCHECKOUT_API_BASE_URL = this.getApiBaseUrl();
+                    // Initialize SmartCheckout SDK (auto-detects base URL)
                     this.smartcheckout = new SmartCheckout(this.publishableKey);
                     
-                    // Initialize CVC verification form
+                    // Initialize CVC verification formn
                     this.cvcVerificationForm = await this.smartcheckout.initCVCVerificationForm({
                         code: this.code,
                         onSuccess: (result) => {
