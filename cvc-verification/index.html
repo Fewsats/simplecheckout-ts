@@ -128,7 +128,7 @@
     </div>
 
     <script type="module">
-        import SmartCheckout from '../dist/SmartCheckout.js';
+        import SmartCheckout from 'smartcheckout-sdk';
         
         class CVCVerificationPage {
             constructor() {
@@ -183,7 +183,7 @@
             async checkVerificationCode() {
                 try {
                     const apiBaseUrl = this.getApiBaseUrl();
-                    const response = await fetch(`${apiBaseUrl}/verification-code-info?code=${encodeURIComponent(this.code)}`);
+                    const response = await fetch(`${apiBaseUrl}/v0/verification-code-info?code=${encodeURIComponent(this.code)}`);
                     const result = await response.json();
                     
                     if (!response.ok) {
@@ -216,7 +216,7 @@
             
             getApiBaseUrl() {
                 // Use environment variable for API base URL, fallback to localhost for development
-                return import.meta.env.VITE_GO_BACKEND_URL || 'http://localhost:8080';
+                return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
             }
             
             showVerificationContent() {

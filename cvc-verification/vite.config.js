@@ -15,9 +15,10 @@ export default defineConfig({
     include: ['@vgs/collect-js']
   },
   resolve: {
-    alias: {
-      '../dist/SmartCheckout.js': resolve(__dirname, '../src/SmartCheckout.ts')
-    }
+    // Note: use this for local development
+    // alias: {
+    //   '../dist/SmartCheckout.js': resolve(__dirname, '../src/SmartCheckout.ts')
+    // }
   },
   plugins: [
     {
