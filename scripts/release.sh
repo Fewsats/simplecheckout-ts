@@ -13,10 +13,10 @@ fi
 
 echo "Starting release for version: $VERSION_ARG"
 
-# Run npm version with the provided argument
-npm version "$VERSION_ARG"
+# Run npm version with the provided argument and a custom commit message
+npm version "$VERSION_ARG" -m "release: v%s"
 
-# Push the new commit and tag
-git push && git push --tags
+# Push the new commit to trigger the release workflow
+git push
 
-echo "✅ Release process initiated. The GitHub Action will now take over."
+echo "✅ Release commit pushed. The GitHub Action will now take over."
