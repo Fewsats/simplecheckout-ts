@@ -11,4 +11,4 @@ export const API_ENDPOINTS = {
 } as const;
 
 // VGS Configuration
-export const VGS_VERSION = '3.1.0';
+export const VGS_VERSION = '3.2.2';
