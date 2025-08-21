@@ -48,65 +48,13 @@ In addition to the core SDK source code in `/src`, this repository contains seve
 
 This is a standalone Vite application that provides a hosted page for CVC verification. When a user needs to re-authenticate a transaction or update a card, they can be redirected to this page. It takes a verification `code` from the URL parameters and uses the SDK's `CVCVerificationForm` to securely collect the CVC. This approach keeps the sensitive CVC collection off of our main application servers. 
 
+For local development instructions, see the `DOCS.md` file within the `cvc-verification/` directory.
+
 ### `playground/`
 
 This Vite application is a live sandbox environment for both our internal developers and our clients. It is publicly deployed at [`playground.smartcheckout.dev`](https://playground.smartcheckout.dev) and allows anyone to interact with the `CreditCardForm` and `CVCVerificationForm`.
 
-## Local Development
-
-This section outlines the process for setting up a local development environment to work on the `smartcheckout-sdk` and test it using the `playground` and `cvc-verification` applications.
-
-### One-Time Setup
-
-To allow the `playground` and `cvc-verification` applications (which use the published version of the SDK by default) to use your local source code, you must link them using `npm link`. This only needs to be done once.
-
-1.  **Install all dependencies:**
-    ```shell
-    # From the root directory
-    npm install
-    cd playground && npm install && cd ..
-    cd cvc-verification && npm install && cd ..
-    ```
-
-2.  **Link the local SDK:**
-    ```shell
-    # From the root directory, creates a global link to the local SDK
-    npm link
-
-    # Navigate to the playground and link it to the local SDK
-    cd playground
-    npm link smartcheckout-sdk
-    cd ..
-
-    # Repeat for the CVC verification app
-    cd cvc-verification
-    npm link smartcheckout-sdk
-    cd ..
-    ```
-
-### Development Workflow
-
-1.  **Make changes** to the SDK source code in the `src/` directory.
-
-2.  **Build the SDK.** After saving your changes, you must rebuild the package. This transpiles the TypeScript into the JavaScript that the linked applications will consume.
-    ```shell
-    # From the root directory
-    npm run build:package
-    ```
-
-3.  **Run the test applications.** To see your changes in action, run the `playground` or `cvc-verification` dev servers.
-    -   **Configuration:** For the SDK to work locally, the test apps must be configured to point to a local backend. To do this, create a file named `.env.local` inside both the `playground/` and `cvc-verification/` directories. Add the following line to each of those files:
-        ```
-        VITE_API_BASE_URL=http://localhost:8080
-        ```
-    -   **Start the Servers:**
-        ```shell
-        # To run the playground (from the root directory)
-        npm run playground:dev
-
-        # To run the CVC verification app (from the root directory)
-        npm run cvc:dev
-        ```
+For local development instructions, see the `DOCS.md` file within the `playground/` directory.
 
 ## Security and Compliance
 
