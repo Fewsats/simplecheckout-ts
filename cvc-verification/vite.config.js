@@ -33,6 +33,6 @@ export default defineConfig(({ mode }) => {
       'smartcheckout-sdk': resolve(__dirname, '../src/SmartCheckout.ts')
     };
   }
-  
+
   return config;
-}); 
+});

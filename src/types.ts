@@ -58,8 +58,6 @@ export interface CardTokenResult {
   success: boolean;
   token: string;
   message: string;
-  vgsData: any;
-  email: string;
 }
 
 export interface VGSConfig {

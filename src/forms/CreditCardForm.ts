@@ -372,8 +372,6 @@ export class CreditCardForm {
         success: true,
         token: result.token,
         message: 'Card stored successfully',
-        vgsData: vgsData, // Include original VGS data
-        email: email // Include email in the result
       };
       
     } catch (error) {

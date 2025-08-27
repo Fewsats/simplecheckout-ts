@@ -30,4 +30,4 @@ export default defineConfig(({ mode }) => {
   // For production builds, Vite will use the version from node_modules,
   // as defined in package.json, because no alias is provided.
   return config;
-}); 
+});

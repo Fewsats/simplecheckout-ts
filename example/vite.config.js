@@ -12,4 +12,4 @@ export default defineConfig({
   optimizeDeps: {
     include: ['@vgs/collect-js']
   }
-}); 
+});
