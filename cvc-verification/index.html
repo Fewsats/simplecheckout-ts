@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Required - SmartCheckout</title>
+    <title>Verification Required - SimpleCheckout</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
         
@@ -117,11 +117,11 @@
     </div>
 
     <script type="module">
-        import SmartCheckout from 'smartcheckout-sdk';
-        
+        import SimpleCheckout from 'simplecheckout-sdk';
+
         class CVCVerificationPage {
             constructor() {
-                this.smartcheckout = null;
+                this.simplecheckout = null;
                 this.cvcVerificationForm = null;
                 this.code = '';
                 this.publishableKey = '';
@@ -160,7 +160,7 @@
                     // Show verification content first (so the container exists for the SDK)
                     this.showVerificationContent();
                     
-                    // Initialize SmartCheckout SDK and form (this will replace the content)
+                    // Initialize SimpleCheckout SDK and form (this will replace the content)
                     await this.initializeForm();
                     
                 } catch (error) {
@@ -205,7 +205,7 @@
             
             getApiBaseUrl() {
                 // Use environment variable for API base URL
-                return import.meta.env.VITE_API_BASE_URL || 'https://api.smartcheckout.dev';
+                return import.meta.env.VITE_API_BASE_URL || 'https://api.simplecheckout.ai';
             }
             
             showVerificationContent() {
@@ -222,12 +222,12 @@
                     }
                     
                     // Expose API base URL for SDK auto-detection
-                    window.SMARTCHECKOUT_API_BASE_URL = this.getApiBaseUrl();
-                    // Initialize SmartCheckout SDK (auto-detects base URL)
-                    this.smartcheckout = new SmartCheckout(this.publishableKey);
-                    
+                    window.SIMPLECHECKOUT_API_BASE_URL = this.getApiBaseUrl();
+                    // Initialize SimpleCheckout SDK (auto-detects base URL)
+                    this.simplecheckout = new SimpleCheckout(this.publishableKey);
+
                     // Initialize CVC verification formn
-                    this.cvcVerificationForm = await this.smartcheckout.initCVCVerificationForm({
+                    this.cvcVerificationForm = await this.simplecheckout.initCVCVerificationForm({
                         code: this.code,
                         onSuccess: (result) => {
                             

@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
   // to enable hot-reloading and instant updates.
   if (mode === 'development') {
     config.resolve.alias = {
-      'smartcheckout-sdk': resolve(__dirname, '../src/SmartCheckout.ts')
+      'simplecheckout-sdk': resolve(__dirname, '../src/SimpleCheckout.ts')
     };
   }
 

@@ -1,11 +1,11 @@
-# SmartCheckout SDK
+# SimpleCheckout SDK
 
-A modern, reusable TypeScript package for securely storing credit card information using SmartCheckout.
+A modern, reusable TypeScript package for securely storing credit card information using SimpleCheckout.
 
 ## Installation
 
 ```bash
-npm install smartcheckout-sdk
+npm install simplecheckout-sdk
 ```
 
 ## Quick Start
@@ -13,15 +13,13 @@ npm install smartcheckout-sdk
 ### Credit Card Form
 
 ```javascript
-import SmartCheckout from 'smartcheckout-sdk';
+import SimpleCheckout from 'simplecheckout-sdk';
 
-// Option A (recommended in SPAs): set meta or global for auto-detection
-// <meta name="smartcheckout:api-base-url" content="https://api.example.com" />
-// or: window.SMARTCHECKOUT_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const smartcheckout = new SmartCheckout('pk_sandbox_xxxx');
+// Initialize SimpleCheckout with your publishable key
+const simplecheckout = new SimpleCheckout('pk_sandbox_xxxx');
 
 // Create and mount a credit card form
-const creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
+const creditCardForm = await simplecheckout.initEmbeddedCreditCardForm({
   onSuccess: (result) => {
     console.log('Card stored! Token:', result.token);
     // Use the token in your application
@@ -38,10 +36,10 @@ creditCardForm.mount('#container');
 ### CVC Verification Form
 
 ```javascript
-const smartcheckout = new SmartCheckout('pk_sandbox_xxxx');
+const simplecheckout = new SimpleCheckout('pk_sandbox_xxxx');
 
 // Create and mount a CVC verification form
-const cvcForm = await smartcheckout.initCVCVerificationForm({
+const cvcForm = await simplecheckout.initCVCVerificationForm({
   code: 'verification_code_from_url',
   onSuccess: (result) => {
     console.log('CVC verified successfully!');
@@ -62,25 +60,20 @@ cvcForm.mount('#container');
 <div id="container"></div>
 ```
 
-That's it! The SmartCheckout package will handle everything else.
+That's it! The SimpleCheckout package will handle everything else.
 
 ## API Reference
 
-### SmartCheckout(publishableKey)
+### SimpleCheckout(publishableKey)
 
-Creates a new SmartCheckout instance.
+Creates a new SimpleCheckout instance.
 
 **Parameters:**
-- `publishableKey` (string, required) - Your SmartCheckout publishable key
+- `publishableKey` (string, required) - Your SimpleCheckout publishable key
 
-The SDK discovers the API base URL at runtime via:
-- A `<meta name="smartcheckout:api-base-url" content="..." />` tag, or
-- `window.SMARTCHECKOUT_API_BASE_URL = '...'`, or
-- A built-in default suitable for local development
+**Returns:** SimpleCheckout instance
 
-**Returns:** SmartCheckout instance
-
-### smartcheckout.initEmbeddedCreditCardForm(options)
+### simplecheckout.initEmbeddedCreditCardForm(options)
 
 Creates a new embedded credit card form.
 
@@ -130,7 +123,7 @@ Updates the form styling.
 
 **Returns:** CreditCardForm - Returns self for chaining
 
-### smartcheckout.initCVCVerificationForm(options)
+### simplecheckout.initCVCVerificationForm(options)
 
 Creates a new CVC verification form.
 

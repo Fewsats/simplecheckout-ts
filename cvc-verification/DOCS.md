@@ -6,7 +6,7 @@ This document provides technical details for the CVC Verification application, i
 
 The CVC Verification application is a standalone, hostable web page designed to securely collect a user's CVC (Card Verification Code) when re-authentication is required. Because PCI compliance standards restrict the long-term storage of CVCs, this page provides a secure flow for users to re-enter their CVC to verify their identity before completing a sensitive transaction.
 
-When a user needs to re-verify, they are redirected to this page with a unique verification `code` in the URL. The application then uses the `smartcheckout-sdk`'s `CVCVerificationForm` to render a secure iframe, ensuring that the sensitive CVC data is sent directly to the vault and never touches our application servers.
+When a user needs to re-verify, they are redirected to this page with a unique verification `code` in the URL. The application then uses the `simplecheckout-sdk`'s `CVCVerificationForm` to render a secure iframe, ensuring that the sensitive CVC data is sent directly to the vault and never touches our application servers.
 
 For general information about the SDK's architecture, please refer to the main [`DOCS.md`](../DOCS.md) file in the root of the repository.
 
@@ -25,7 +25,7 @@ To begin development, you only need to ensure all dependencies are installed and
     cd cvc-verification && npm install && cd ..
     ```
 
-2.  **Configure the API Endpoint:** By default, the application is configured to point to the production SmartCheckout API. For local development, you can override this by creating a `.env.local` file within this directory (`cvc-verification/`). This will make the application point to a local API instance.
+2.  **Configure the API Endpoint:** By default, the application is configured to point to the production SimpleCheckout API. For local development, you can override this by creating a `.env.local` file within this directory (`cvc-verification/`). This will make the application point to a local API instance.
 
     Add the following line to your `.env.local` file:
     ```

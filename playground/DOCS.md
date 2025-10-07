@@ -1,12 +1,12 @@
-# SmartCheckout Playground Docs
+# SimpleCheckout Playground Docs
 
-This document provides technical details and local development instructions for the SmartCheckout Playground application.
+This document provides technical details and local development instructions for the SimpleCheckout Playground application.
 
 ## Overview
 
-The SmartCheckout Playground is a client-facing, production-deployed application available at [`playground.smartcheckout.dev`](https://playground.smartcheckout.dev). Its primary purpose is to provide a live sandbox environment where clients can test credit card tokenization and interact with the `CreditCardForm` and `CVCVerificationForm` components using their sandbox API keys.
+The SimpleCheckout Playground is a client-facing, production-deployed application available at [`playground.simplecheckout.ai`](https://playground.simplecheckout.ai). Its primary purpose is to provide a live sandbox environment where clients can test credit card tokenization and interact with the `CreditCardForm` and `CVCVerificationForm` components using their sandbox API keys.
 
-By default, this deployed application points to the production SmartCheckout API (`api.smartcheckout.dev`), ensuring that it functions as a true sandbox for our clients. Internally, this application also serves as our primary development and testing tool for the `smartcheckout-sdk`.
+By default, this deployed application points to the production SimpleCheckout API (`api.simplecheckout.ai`), ensuring that it functions as a true sandbox for our clients. Internally, this application also serves as our primary development and testing tool for the `simplecheckout-sdk`.
 
 For general information about the SDK's architecture, please refer to the main [`DOCS.md`](../DOCS.md) file in the root of the repository.
 

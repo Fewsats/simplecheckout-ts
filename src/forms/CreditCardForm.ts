@@ -10,10 +10,10 @@ import {
   API_BASE_URL,
   API_ENDPOINTS
 } from '../constants';
-import type SmartCheckout from '../SmartCheckout';
+import type SimpleCheckout from '../SimpleCheckout';
 
 export class CreditCardForm {
-  private smartcheckout: SmartCheckout;
+  private simplecheckout: SimpleCheckout;
   private vgsForm: VGSForm;
   private config: VGSConfig;
   private publishableKey: string;
@@ -30,11 +30,11 @@ export class CreditCardForm {
   private formSubmitted: boolean = false;
   private mounted: boolean = false;
 
-  constructor(smartcheckout: SmartCheckout, options: CreditCardFormOptions = {}) {
-    this.smartcheckout = smartcheckout;
-    this.vgsForm = smartcheckout.getVgsForm()!;
-    this.config = smartcheckout.getConfig()!;
-    this.publishableKey = smartcheckout.getPublishableKey();
+  constructor(simplecheckout: SimpleCheckout, options: CreditCardFormOptions = {}) {
+    this.simplecheckout = simplecheckout;
+    this.vgsForm = simplecheckout.getVgsForm()!;
+    this.config = simplecheckout.getConfig()!;
+    this.publishableKey = simplecheckout.getPublishableKey();
     
     // Form options
     this.onSuccess = options.onSuccess || (() => {});
@@ -210,16 +210,16 @@ export class CreditCardForm {
     if (!this.container) return;
 
     this.container.innerHTML = `
-      <div class="smartcheckout-container">
-        <form id="smartcheckout-form">
+      <div class="simplecheckout-container">
+        <form id="simplecheckout-form">
           <div class="form-section">
             <label>Email</label>
             <input type="email" id="sc-email" class="form-field-regular" placeholder="email@example.com" required>
           </div>
-          
+
           <div class="form-section">
             <h3 class="section-title">Payment method</h3>
-            
+
             <div class="field-group">
               <label>Card information</label>
               <div id="sc-cardnumber" class="form-field card-number-field"></div>
@@ -232,20 +232,20 @@ export class CreditCardForm {
                 </div>
               </div>
             </div>
-            
+
             <div class="field-group">
               <label>Cardholder name</label>
               <div id="sc-cardholder" class="form-field"></div>
             </div>
           </div>
-          
+
           <button type="submit">Save card</button>
         </form>
-        
-        <div id="smartcheckout-status" class="status-message"></div>
-        
-        <div class="smartcheckout-signature">
-          <svg class="smartcheckout-logo" width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+        <div id="simplecheckout-status" class="status-message"></div>
+
+        <div class="simplecheckout-signature">
+          <svg class="simplecheckout-logo" width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11.7172 28.509L3 23.496V19.6072L11.7172 24.6206L20.4341 19.6072V23.496L11.7172 28.509Z" fill="#4CA6E6"/>
             <path d="M20.2826 3.45822L11.5654 8.47122V12.3594L20.2826 7.34638L28.9995 12.3594V8.47122L20.2826 3.45822Z" fill="#4CA6E6"/>
             <path d="M3 18.5629L11.7172 23.5762L15.0975 21.6319L6.3806 16.6186V6.59199L3 8.53623V18.5629Z" fill="#4CA6E6"/>
@@ -253,7 +253,7 @@ export class CreditCardForm {
             <path d="M7.30664 6.01359L7.30696 16.0399L10.6876 17.9841V7.9575L19.4044 2.94451L16.0239 0.999954L7.30664 6.01359Z" fill="#4CA6E6"/>
             <path d="M28.9993 13.4039V23.4305L25.6187 25.3748V15.3484L16.9019 10.3348L20.2825 8.39025L28.9993 13.4039Z" fill="#4CA6E6"/>
           </svg>
-          <span>by SmartCheckout</span>
+          <span>by SimpleCheckout</span>
         </div>
       </div>
     `;
@@ -299,7 +299,7 @@ export class CreditCardForm {
   }
 
   private _setupFormSubmission(): void {
-    const form = this.container?.querySelector('#smartcheckout-form') as HTMLFormElement;
+    const form = this.container?.querySelector('#simplecheckout-form') as HTMLFormElement;
     if (form) {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -381,7 +381,7 @@ export class CreditCardForm {
   }
 
   private _updateFormStatus(state: any): void {
-    const statusElement = this.container?.querySelector('#smartcheckout-status') as HTMLElement;
+    const statusElement = this.container?.querySelector('#simplecheckout-status') as HTMLElement;
     if (!statusElement) return;
 
     // Track if user has interacted with any field
@@ -413,7 +413,7 @@ export class CreditCardForm {
   }
 
   private _showStatus(message: string, type: string = 'info'): void {
-    const statusElement = this.container?.querySelector('#smartcheckout-status') as HTMLElement;
+    const statusElement = this.container?.querySelector('#simplecheckout-status') as HTMLElement;
     if (statusElement) {
       statusElement.textContent = message;
       statusElement.className = `status-message ${type}`;
@@ -455,23 +455,23 @@ export class CreditCardForm {
 
   private _injectCSS(): void {
     // Check if styles already injected
-    if (document.getElementById('smartcheckout-styles')) {
+    if (document.getElementById('simplecheckout-styles')) {
       return;
     }
 
     const style = document.createElement('style');
-    style.id = 'smartcheckout-styles';
+    style.id = 'simplecheckout-styles';
     style.textContent = `
-      .smartcheckout-container {
+      .simplecheckout-container {
         box-sizing: border-box;
       }
 
-      .smartcheckout-container * {
+      .simplecheckout-container * {
         box-sizing: border-box;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       }
 
-      .smartcheckout-container iframe {
+      .simplecheckout-container iframe {
         width: 100%;
         height: 100%;
         border: none;
@@ -497,7 +497,7 @@ export class CreditCardForm {
         box-sizing: border-box !important;
       }
 
-      .smartcheckout-container {
+      .simplecheckout-container {
         max-width: 480px;
         margin: 0 auto;
         background-color: #ffffff;
@@ -508,7 +508,7 @@ export class CreditCardForm {
         position: relative;
       }
 
-      .smartcheckout-container form {
+      .simplecheckout-container form {
         max-width: 100%;
         margin: 0;
       }
@@ -529,7 +529,7 @@ export class CreditCardForm {
         margin-bottom: 24px;
       }
 
-      .smartcheckout-container label {
+      .simplecheckout-container label {
         display: block;
         font-size: 15px;
         margin-bottom: 10px;
@@ -619,7 +619,7 @@ export class CreditCardForm {
         border-top: none;
       }
 
-      .smartcheckout-container button[type="submit"] {
+      .simplecheckout-container button[type="submit"] {
         width: 100%;
         height: 48px;
         margin-top: 8px;
@@ -639,18 +639,18 @@ export class CreditCardForm {
         letter-spacing: -0.1px;
       }
 
-      .smartcheckout-container button[type="submit"]:hover:not(:disabled) {
+      .simplecheckout-container button[type="submit"]:hover:not(:disabled) {
         background: #3d95d9;
         transform: translateY(-1px);
         box-shadow: 0 8px 16px rgba(76, 166, 230, 0.25);
       }
 
-      .smartcheckout-container button[type="submit"]:active:not(:disabled) {
+      .simplecheckout-container button[type="submit"]:active:not(:disabled) {
         transform: translateY(0);
         box-shadow: 0 4px 8px rgba(76, 166, 230, 0.25);
       }
 
-      .smartcheckout-container button[type="submit"]:disabled {
+      .simplecheckout-container button[type="submit"]:disabled {
         background: #f5f5f5;
         color: #8a8a8a;
         cursor: not-allowed;
@@ -739,8 +739,8 @@ export class CreditCardForm {
         display: none;
       }
 
-      /* SmartCheckout signature */
-      .smartcheckout-signature {
+      /* SimpleCheckout signature */
+      .simplecheckout-signature {
         position: absolute;
         bottom: 16px;
         right: 16px;
@@ -757,22 +757,22 @@ export class CreditCardForm {
         letter-spacing: -0.05px;
       }
 
-      .smartcheckout-signature:hover {
+      .simplecheckout-signature:hover {
         opacity: 0.8;
       }
 
-      .smartcheckout-logo {
+      .simplecheckout-logo {
         flex-shrink: 0;
       }
 
       /* Responsive design */
       @media (max-width: 480px) {
-        .smartcheckout-container {
+        .simplecheckout-container {
           margin: 10px;
           padding: 20px;
         }
         
-        .smartcheckout-container form {
+        .simplecheckout-container form {
           margin: 10px auto;
         }
         
@@ -794,7 +794,7 @@ export class CreditCardForm {
           border-radius: 0 0 4px 4px;
         }
         
-        .smartcheckout-signature {
+        .simplecheckout-signature {
           bottom: 12px;
           right: 12px;
           font-size: 11px;

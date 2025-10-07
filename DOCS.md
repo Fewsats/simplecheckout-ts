@@ -1,11 +1,11 @@
-# SmartCheckout SDK Internal Documentation
+# SimpleCheckout SDK Internal Documentation
 
-This document provides a technical overview of the SmartCheckout TypeScript SDK, its architecture, and the surrounding projects within this repository. It is intended for developers working on this project. For public-facing documentation on how to use the NPM package, see `README.md`.
+This document provides a technical overview of the SimpleCheckout TypeScript SDK, its architecture, and the surrounding projects within this repository. It is intended for developers working on this project. For public-facing documentation on how to use the NPM package, see `README.md`.
 
 ## Overview
 
-The `smartcheckout-ts` repository contains the following:
-1.  **`smartcheckout-sdk`**: A TypeScript package that allows our customers to securely collect and store credit card information without the sensitive data ever touching their servers.
+The `simplecheckout-ts` repository contains the following:
+1.  **`simplecheckout-sdk`**: A TypeScript package that allows our customers to securely collect and store credit card information without the sensitive data ever touching their servers.
 2.  **`cvc-verification`**: A standalone, hostable web application that provides a page for users to re-verify their CVC for an existing card.
 3.  **`playground`**: A development and testing environment that demonstrates how to integrate and use the SDK.
 
@@ -17,8 +17,8 @@ Currently, we use [Very Good Security (VGS)](https://www.verygoodsecurity.com/) 
 
 ### High-Level Data Flow
 
-1.  **Initialization**: The merchant's website initializes our SDK by creating a `new SmartCheckout('pk_sandbox_...')` instance with their publishable key.
-2.  **Configuration Fetch**: The SDK sends the publishable key to the SmartCheckout API (`/api/v1/provider-config`) to fetch the necessary provider configuration (vault ID, route ID, etc.).
+1.  **Initialization**: The merchant's website initializes our SDK by creating a `new SimpleCheckout('pk_sandbox_...')` instance with their publishable key.
+2.  **Configuration Fetch**: The SDK sends the publishable key to the SimpleCheckout API (`/api/v1/provider-config`) to fetch the necessary provider configuration (vault ID, route ID, etc.).
 3.  **Form Initialization**: The merchant calls a method like `initEmbeddedCreditCardForm()` to create a form instance.
 4.  **Mounting**: The merchant calls `.mount('#container')` to render the form on their page. The SDK injects the required HTML and CSS, and then uses a provider-specific library (`VGSCollect.js`) to create secure iframes for the sensitive fields.
 5.  **Submission**: 
@@ -29,15 +29,15 @@ Currently, we use [Very Good Security (VGS)](https://www.verygoodsecurity.com/) 
 
 ### Core Components
 
--   `SmartCheckout.ts`: This is the main public class and entry point for the SDK. It handles the initial configuration, authentication with our backend (via the publishable key), and serves as a factory for creating form instances (`CreditCardForm`, `CVCVerificationForm`).
+-   `SimpleCheckout.ts`: This is the main public class and entry point for the SDK. It handles the initial configuration, authentication with our backend (via the publishable key), and serves as a factory for creating form instances (`CreditCardForm`, `CVCVerificationForm`).
 -   `forms/CreditCardForm.ts`: Manages the entire lifecycle of the credit card collection form. It is responsible for rendering the UI, initializing the secure iframe fields, handling user input validation, and managing the multi-step submission process.
 -   `forms/CVCVerificationForm.ts`: A specialized form for CVC re-verification. It follows a similar architecture but is streamlined for only collecting the CVC.
 
 ### Configuration
 
-The SDK requires a base URL for the SmartCheckout API. It resolves this URL at runtime using the following priority:
-1.  A `<meta name="smartcheckout:api-base-url" content="..." />` tag in the HTML `head`.
-2.  A global `window.SMARTCHECKOUT_API_BASE_URL` variable.
+The SDK requires a base URL for the SimpleCheckout API. It resolves this URL at runtime using the following priority:
+1.  A `<meta name="simplecheckout:api-base-url" content="..." />` tag in the HTML `head`.
+2.  A global `window.SIMPLECHECKOUT_API_BASE_URL` variable.
 3.  A default value defined in `src/constants.ts`, which points to a local development environment.
 
 ## Other Projects
@@ -52,7 +52,7 @@ For local development instructions, see the `DOCS.md` file within the `cvc-verif
 
 ### `playground/`
 
-This Vite application is a live sandbox environment for both our internal developers and our clients. It is publicly deployed at [`playground.smartcheckout.dev`](https://playground.smartcheckout.dev) and allows anyone to interact with the `CreditCardForm` and `CVCVerificationForm`.
+This Vite application is a live sandbox environment for both our internal developers and our clients. It is publicly deployed at [`playground.simplecheckout.ai`](https://playground.simplecheckout.ai) and allows anyone to interact with the `CreditCardForm` and `CVCVerificationForm`.
 
 For local development instructions, see the `DOCS.md` file within the `playground/` directory.
 
@@ -61,4 +61,4 @@ For local development instructions, see the `DOCS.md` file within the `playgroun
 The primary architectural goal of this SDK is to simplify PCI compliance for our merchants.
 -   **Data Isolation**: By using a third-party vaulting library, raw cardholder data (PAN, CVC, Expiry) is never exposed to the merchant's frontend code, our SDK's JavaScript context, or the merchant's servers. The data is isolated within the provider's iframes.
 -   **Tokenization**: The SDK exclusively deals with tokenized representations (aliases) of sensitive data after the initial collection by the vaulting provider.
--   **Authentication**: All communication between the SDK and the SmartCheckout API is authenticated using a short-lived configuration fetched via the merchant's `publishableKey`.
+-   **Authentication**: All communication between the SDK and the SimpleCheckout API is authenticated using a short-lived configuration fetched via the merchant's `publishableKey`.

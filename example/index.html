@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartCheckout npm Package Test</title>
+    <title>SimpleCheckout npm Package Test</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -71,8 +71,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>SmartCheckout npm Package Test</h1>
-        <p>This example demonstrates importing and using the SmartCheckout npm package.</p>
+        <h1>SimpleCheckout npm Package Test</h1>
+        <p>This example demonstrates importing and using the SimpleCheckout npm package.</p>
         
         <div class="form-container">
             <div id="checkout-container"></div>
@@ -90,9 +90,9 @@
     </div>
 
     <script type="module">
-        import SmartCheckout from '../dist/SmartCheckout.js';
-        
-        let smartcheckout = null;
+        import SimpleCheckout from '../dist/SimpleCheckout.js';
+
+        let simplecheckout = null;
         let creditCardForm = null;
         
         const statusEl = document.getElementById('status');
@@ -107,15 +107,15 @@
         
         async function initializeForm() {
             try {
-                updateStatus('Initializing SmartCheckout...', 'info');
+                updateStatus('Initializing SimpleCheckout...', 'info');
                 
                 // Get API key from URL or use a test key
                 const urlParams = new URLSearchParams(window.location.search);
                 const publishableKey = urlParams.get('publishableKey') || 'sk_sandbox_demo_key';
                 
-                smartcheckout = new SmartCheckout(publishableKey);
-                
-                creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
+                simplecheckout = new SimpleCheckout(publishableKey);
+
+                creditCardForm = await simplecheckout.initEmbeddedCreditCardForm({
                     onSuccess: (result) => {
                         updateStatus(`Success! Token: ${result.token}`, 'success');
                         console.log('Card stored successfully:', result);

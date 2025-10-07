@@ -1,7 +1,7 @@
 {
-  "name": "smartcheckout-example",
+  "name": "simplecheckout-example",
   "version": "1.0.0",
-  "description": "Example project testing SmartCheckout npm package",
+  "description": "Example project testing SimpleCheckout npm package",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@smartcheckout/sdk": "file:../smartcheckout-sdk-1.0.0.tgz",
+    "simplecheckout-sdk": "1.2.1",
     "@vgs/collect-js": "^0.7.2"
   },
   "devDependencies": {

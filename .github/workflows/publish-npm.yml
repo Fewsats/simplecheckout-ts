@@ -87,7 +87,7 @@ jobs:
       id: check-npm
       run: |
         VERSION="${{ needs.check-version.outputs.current-version }}"
-        if npm view smartcheckout-sdk@$VERSION version 2>/dev/null; then
+        if npm view simplecheckout-sdk@$VERSION version 2>/dev/null; then
           echo "exists=true" >> $GITHUB_OUTPUT
           echo "⚠️ Version $VERSION already exists on npm"
         else
@@ -121,11 +121,11 @@ jobs:
           
           ### 📦 NPM Package
           ```bash
-          npm install smartcheckout-sdk@${{ needs.check-version.outputs.current-version }}
+          npm install simplecheckout-sdk@${{ needs.check-version.outputs.current-version }}
           ```
           
           ### 🔗 Links
-          - [NPM Package](https://www.npmjs.com/package/smartcheckout-sdk/v/${{ needs.check-version.outputs.current-version }})
+          - [NPM Package](https://www.npmjs.com/package/simplecheckout-sdk/v/${{ needs.check-version.outputs.current-version }})
           - [Documentation](https://github.com/${{ github.repository }}#readme)
           
           _This release was automatically created by GitHub Actions._
@@ -137,8 +137,8 @@ jobs:
     - name: Deployment Summary
       if: steps.check-npm.outputs.exists == 'false'
       run: |
-        echo "🎉 Successfully published smartcheckout-sdk@${{ needs.check-version.outputs.current-version }}"
-        echo "📦 NPM: https://www.npmjs.com/package/smartcheckout-sdk"
+        echo "🎉 Successfully published simplecheckout-sdk@${{ needs.check-version.outputs.current-version }}"
+        echo "📦 NPM: https://www.npmjs.com/package/simplecheckout-sdk"
         echo "🏷️ Git Tag: v${{ needs.check-version.outputs.current-version }}"
         echo "📋 GitHub Release: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.check-version.outputs.current-version }}"
 

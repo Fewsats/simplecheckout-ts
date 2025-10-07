@@ -1,11 +1,11 @@
 # Production Environment: NPM Package
 
-This document provides an overview of how the `smartcheckout-sdk` NPM package is versioned, built, and published.
+This document provides an overview of how the `simplecheckout-sdk` NPM package is versioned, built, and published.
 
 ## Package Overview
 
--   **Package Name**: `smartcheckout-sdk`
--   **Registry**: Public NPM registry ([https://www.npmjs.com/package/smartcheckout-sdk](https://www.npmjs.com/package/smartcheckout-sdk))
+-   **Package Name**: `simplecheckout-sdk`
+-   **Registry**: Public NPM registry ([https://www.npmjs.com/package/simplecheckout-sdk](https://www.npmjs.com/package/simplecheckout-sdk))
 
 ## Release Process
 

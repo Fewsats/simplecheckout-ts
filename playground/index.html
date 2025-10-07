@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartCheckout Playground</title>
+    <title>SimpleCheckout Playground</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -133,28 +133,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>SmartCheckout Playground</h1>
-        <p class="subtitle">Test the SmartCheckout credit card tokenization flow</p>
+        <h1>SimpleCheckout Playground</h1>
+        <p class="subtitle">Test the SimpleCheckout credit card tokenization flow</p>
         
         <div class="instructions">
             <h3>How to use:</h3>
             <ul>
-                <li>Enter your API key below (or pass it as a URL param ?publishable_key=pk_sandbox_...)</li>
+                <li>Enter your Publishable Key below (or pass it as a URL param ?publishable_key=pk_sandbox_...)</li>
                 <li>Click "Initialize Form" to load the secure credit card form</li>
                 <li>Fill in the credit card details and email</li>
                 <li>Submit the form to receive a token representing the card</li>
-                <li>You can use this token to <a href="https://docs.smartcheckout.dev/intro">create checkouts with the users' CC</a></li>
+                <li>You can use this token to <a href="https://docs.simplecheckout.ai/">create checkouts with the users' CC</a></li>
             </ul>
         </div>
 
         <div class="api-key-section">
-            <label for="api-key">API Key:</label>
+            <label for="api-key">Publishable Key:</label>
             <div class="api-key-row">
                 <input 
                     type="text" 
                     id="api-key" 
                     class="api-key-input" 
-                    placeholder="Enter your API key (e.g., pk_sandbox_...)"
+                    placeholder="Enter your Publishable Key (e.g., pk_sandbox_...)"
                 />
                 <button id="init-btn" class="init-button">Initialize Form</button>
             </div>
@@ -166,7 +166,7 @@
         
         <div id="checkout-container">
             <div class="placeholder-text">
-                Enter your API key above and click "Initialize Form" to begin
+                Enter your Publishable Key above and click "Initialize Form" to begin
             </div>
         </div>
         
@@ -174,9 +174,9 @@
     </div>
 
     <script type="module">
-        import SmartCheckout from 'smartcheckout-sdk';
-        
-        let smartcheckout = null;
+        import SimpleCheckout from 'simplecheckout-sdk';
+
+        let simplecheckout = null;
         let creditCardForm = null;
         
         const statusEl = document.getElementById('status');
@@ -191,15 +191,15 @@
         
         async function initializeForm(publishableKey) {
             try {
-                updateStatus('Initializing SmartCheckout...', 'info');
+                updateStatus('Initializing SimpleCheckout...', 'info');
                 
                 // Clear any existing form
                 checkoutContainer.innerHTML = '';
                 checkoutContainer.classList.add('active');
                 
-                smartcheckout = new SmartCheckout(publishableKey);
-                
-                creditCardForm = await smartcheckout.initEmbeddedCreditCardForm({
+                simplecheckout = new SimpleCheckout(publishableKey);
+
+                creditCardForm = await simplecheckout.initEmbeddedCreditCardForm({
                     onSuccess: (result) => {
                         updateStatus(`Success! Token: ${result.token}`, 'success');
                         console.log('Card stored successfully:', result);
@@ -216,7 +216,7 @@
             } catch (error) {
                 updateStatus(`Initialization error: ${error.message}`, 'error');
                 console.error('Initialization error:', error);
-                checkoutContainer.innerHTML = '<div class="placeholder-text">Failed to load form. Please check your API key.</div>';
+                checkoutContainer.innerHTML = '<div class="placeholder-text">Failed to load form. Please check your Publishable Key.</div>';
                 checkoutContainer.classList.remove('active');
             }
         }
@@ -228,7 +228,7 @@
             
             if (urlPublishableKey) {
                 publishableKeyInput.value = urlPublishableKey;
-                updateStatus('API key loaded from URL. Click "Initialize Form" to begin.', 'info');
+                updateStatus('Publishable Key loaded from URL. Click "Initialize Form" to begin.', 'info');
             }
         });
         
@@ -237,7 +237,7 @@
             const publishableKey = publishableKeyInput.value.trim();
             
             if (!publishableKey) {
-                updateStatus('Please enter an API key', 'error');
+                updateStatus('Please enter a Publishable Key', 'error');
                 return;
             }
             

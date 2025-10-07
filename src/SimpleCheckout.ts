@@ -16,7 +16,7 @@ import {
 import { CreditCardForm } from './forms/CreditCardForm';
 import { CVCVerificationForm } from './forms/CVCVerificationForm';
 
-class SmartCheckout {
+class SimpleCheckout {
   private publishableKey: string;
   private apiBaseUrl: string;
   protected config: VGSConfig | null = null;
@@ -149,5 +149,5 @@ class SmartCheckout {
 }
 
 
-// Export the main SmartCheckout class
-export default SmartCheckout; 
+// Export the main SimpleCheckout class
+export default SimpleCheckout; 

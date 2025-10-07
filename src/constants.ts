@@ -1,6 +1,7 @@
 // API Configuration
 // Vite env var is used for local dev to override the API base URL
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.smartcheckout.dev';
+// export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.simplecheckout.ai';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
 // API Endpoints
 export const API_ENDPOINTS = {

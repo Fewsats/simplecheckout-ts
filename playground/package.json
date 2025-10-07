@@ -1,5 +1,5 @@
 {
-  "name": "smartcheckout-playground",
+  "name": "simplecheckout-playground",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "npm run build && npx serve dist -p ${PORT:-3000}"
   },
   "dependencies": {
-    "smartcheckout-sdk": "1.2.1"
+    "simplecheckout-sdk": "1.2.1"
   },
   "devDependencies": {
     "vite": "^5.0.0"

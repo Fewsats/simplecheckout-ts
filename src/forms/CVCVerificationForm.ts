@@ -9,10 +9,10 @@ import {
   API_BASE_URL,
   API_ENDPOINTS
 } from '../constants';
-import type SmartCheckout from '../SmartCheckout';
+import type SimpleCheckout from '../SimpleCheckout';
 
 export class CVCVerificationForm {
-  private smartcheckout: SmartCheckout;
+  private simplecheckout: SimpleCheckout;
   private vgsForm: VGSForm;
   private config: VGSConfig;
   private publishableKey: string;
@@ -28,11 +28,11 @@ export class CVCVerificationForm {
   private cvcField: any = null;
   private mounted: boolean = false;
 
-  constructor(smartcheckout: SmartCheckout, options: CVCVerificationFormOptions) {
-    this.smartcheckout = smartcheckout;
-    this.vgsForm = smartcheckout.getVgsForm()!;
-    this.config = smartcheckout.getConfig()!;
-    this.publishableKey = smartcheckout.getPublishableKey();
+  constructor(simplecheckout: SimpleCheckout, options: CVCVerificationFormOptions) {
+    this.simplecheckout = simplecheckout;
+    this.vgsForm = simplecheckout.getVgsForm()!;
+    this.config = simplecheckout.getConfig()!;
+    this.publishableKey = simplecheckout.getPublishableKey();
     
     // Form options
     this.code = options.code;
@@ -169,7 +169,7 @@ export class CVCVerificationForm {
     if (!this.container) return;
 
     this.container.innerHTML = `
-      <div class="smartcheckout-container">
+      <div class="simplecheckout-container">
         <div class="logo">
           <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11.7172 28.509L3 23.496V19.6072L11.7172 24.6206L20.4341 19.6072V23.496L11.7172 28.509Z" fill="#4CA6E6"/>
@@ -194,8 +194,8 @@ export class CVCVerificationForm {
 
         <div id="status-message" class="status-message"></div>
         
-        <div class="smartcheckout-signature">
-          <svg class="smartcheckout-logo" width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="simplecheckout-signature">
+          <svg class="simplecheckout-logo" width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11.7172 28.509L3 23.496V19.6072L11.7172 24.6206L20.4341 19.6072V23.496L11.7172 28.509Z" fill="#4CA6E6"/>
             <path d="M20.2826 3.45822L11.5654 8.47122V12.3594L20.2826 7.34638L28.9995 12.3594V8.47122L20.2826 3.45822Z" fill="#4CA6E6"/>
             <path d="M3 18.5629L11.7172 23.5762L15.0975 21.6319L6.3806 16.6186V6.59199L3 8.53623V18.5629Z" fill="#4CA6E6"/>
@@ -203,7 +203,7 @@ export class CVCVerificationForm {
             <path d="M7.30664 6.01359L7.30696 16.0399L10.6876 17.9841V7.9575L19.4044 2.94451L16.0239 0.999954L7.30664 6.01359Z" fill="#4CA6E6"/>
             <path d="M28.9993 13.4039V23.4305L25.6187 25.3748V15.3484L16.9019 10.3348L20.2825 8.39025L28.9993 13.4039Z" fill="#4CA6E6"/>
           </svg>
-          <span>by SmartCheckout</span>
+          <span>by SimpleCheckout</span>
         </div>
       </div>
     `;
@@ -315,14 +315,14 @@ export class CVCVerificationForm {
 
   private _injectCSS(): void {
     // Check if styles already injected
-    if (document.getElementById('smartcheckout-cvc-styles')) {
+    if (document.getElementById('simplecheckout-cvc-styles')) {
       return;
     }
 
     const style = document.createElement('style');
-    style.id = 'smartcheckout-cvc-styles';
+    style.id = 'simplecheckout-cvc-styles';
     style.textContent = `
-      .smartcheckout-container {
+      .simplecheckout-container {
         max-width: 480px;
         width: 90%;
         margin: 0 auto;
@@ -336,7 +336,7 @@ export class CVCVerificationForm {
         box-sizing: border-box;
       }
 
-      .smartcheckout-container * {
+      .simplecheckout-container * {
         box-sizing: border-box;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       }
@@ -350,7 +350,7 @@ export class CVCVerificationForm {
         height: 48px;
       }
 
-      .smartcheckout-container h1 {
+      .simplecheckout-container h1 {
         font-size: 24px;
         font-weight: 600;
         color: #374151;
@@ -366,13 +366,13 @@ export class CVCVerificationForm {
         line-height: 1.5;
       }
 
-      .smartcheckout-container form {
+      .simplecheckout-container form {
         max-width: 100%;
         margin: 0;
         text-align: left;
       }
 
-      .smartcheckout-container label {
+      .simplecheckout-container label {
         display: block;
         font-size: 15px;
         margin-bottom: 10px;
@@ -417,7 +417,7 @@ export class CVCVerificationForm {
         box-sizing: border-box !important;
       }
 
-      .smartcheckout-container button[type="submit"] {
+      .simplecheckout-container button[type="submit"] {
         width: 100%;
         height: 48px;
         margin-top: 24px;
@@ -437,18 +437,18 @@ export class CVCVerificationForm {
         letter-spacing: -0.1px;
       }
 
-      .smartcheckout-container button[type="submit"]:hover:not(:disabled) {
+      .simplecheckout-container button[type="submit"]:hover:not(:disabled) {
         background: #3d95d9;
         transform: translateY(-1px);
         box-shadow: 0 8px 16px rgba(76, 166, 230, 0.25);
       }
 
-      .smartcheckout-container button[type="submit"]:active:not(:disabled) {
+      .simplecheckout-container button[type="submit"]:active:not(:disabled) {
         transform: translateY(0);
         box-shadow: 0 4px 8px rgba(76, 166, 230, 0.25);
       }
 
-      .smartcheckout-container button[type="submit"]:disabled {
+      .simplecheckout-container button[type="submit"]:disabled {
         background: #f5f5f5;
         color: #8a8a8a;
         cursor: not-allowed;
@@ -532,8 +532,8 @@ export class CVCVerificationForm {
         display: none;
       }
 
-      /* SmartCheckout signature */
-      .smartcheckout-signature {
+      /* SimpleCheckout signature */
+      .simplecheckout-signature {
         position: absolute;
         bottom: 16px;
         right: 16px;
@@ -550,22 +550,22 @@ export class CVCVerificationForm {
         letter-spacing: -0.05px;
       }
 
-      .smartcheckout-signature:hover {
+      .simplecheckout-signature:hover {
         opacity: 0.8;
       }
 
-      .smartcheckout-logo {
+      .simplecheckout-logo {
         flex-shrink: 0;
       }
 
       /* Responsive design */
       @media (max-width: 480px) {
-        .smartcheckout-container {
+        .simplecheckout-container {
           margin: 10px;
           padding: 20px;
         }
         
-        .smartcheckout-signature {
+        .simplecheckout-signature {
           bottom: 12px;
           right: 12px;
           font-size: 11px;

@@ -1,14 +1,14 @@
 {
-  "name": "smartcheckout-sdk",
+  "name": "simplecheckout-sdk",
   "version": "1.2.1",
   "description": "A modern, secure JavaScript SDK for credit card data collection with PCI-compliant handling and customizable styling",
-  "main": "dist/SmartCheckout.js",
-  "types": "dist/SmartCheckout.d.ts",
+  "main": "dist/SimpleCheckout.js",
+  "types": "dist/SimpleCheckout.d.ts",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/SmartCheckout.js",
-      "types": "./dist/SmartCheckout.d.ts"
+      "import": "./dist/SimpleCheckout.js",
+      "types": "./dist/SimpleCheckout.d.ts"
     }
   },
   "scripts": {
@@ -38,7 +38,7 @@
     "payment",
     "form",
     "iframe",
-    "smartcheckout",
+    "simplecheckout",
     "credit-card",
     "secure-payments",
     "pci-compliant",
@@ -46,14 +46,14 @@
     "checkout",
     "sdk"
   ],
-  "author": "SmartCheckout Team",
+  "author": "SimpleCheckout Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fewsats/smartcheckout-ts.git"
+    "url": "git+https://github.com/Fewsats/simplecheckout-ts.git"
   },
-  "homepage": "https://github.com/Fewsats/smartcheckout-ts#readme",
+  "homepage": "https://github.com/Fewsats/simplecheckout-ts#readme",
   "bugs": {
-    "url": "https://github.com/Fewsats/smartcheckout-ts/issues"
+    "url": "https://github.com/Fewsats/simplecheckout-ts/issues"
   }
 }

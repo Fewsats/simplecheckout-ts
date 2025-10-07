@@ -3,31 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SmartCheckout - Credit Card Storage</title>
+    <title>SimpleCheckout - Credit Card Storage</title>
   </head>
   <body>
-    <div id="smartcheckout-container"></div>
-    
+    <div id="simplecheckout-container"></div>
+
     <script type="module">
-      import SmartCheckout from './dist/SmartCheckout.js';
-      
+      import SimpleCheckout from './dist/SimpleCheckout.js';
+
       // Get API key from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const publishableKey = urlParams.get('publishable_key');
-      
+
       if (!publishableKey) {
         document.body.innerHTML = `
           <div style="text-align: center; padding: 50px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-            <h1>SmartCheckout</h1>
+            <h1>SimpleCheckout</h1>
             <p>Please provide an API key via URL parameter: <code>?publishable_key=your_publishable_key</code></p>
           </div>
         `;
       } else {
-        // Initialize SmartCheckout with Stripe-like API
-        const smartcheckout = new SmartCheckout(publishableKey);
-        
+        // Initialize SimpleCheckout
+        const simplecheckout = new SimpleCheckout(publishableKey);
+
         // Create and mount the credit card form
-        smartcheckout.initEmbeddedCreditCardForm({
+        simplecheckout.initEmbeddedCreditCardForm({
           onSuccess: (result) => {
             console.log('Card stored successfully:', result);
           },
@@ -35,7 +35,7 @@
             console.error('Error storing card:', error);
           }
         }).then(creditCardForm => {
-          creditCardForm.mount('#smartcheckout-container');
+          creditCardForm.mount('#simplecheckout-container');
         });
       }
     </script>

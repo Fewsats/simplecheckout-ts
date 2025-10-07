@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
 
   if (mode === 'development') {
     config.resolve.alias = {
-      'smartcheckout-sdk': resolve(__dirname, '../src/SmartCheckout.ts')
+      'simplecheckout-sdk': resolve(__dirname, '../src/SimpleCheckout.ts')
     };
   }
 

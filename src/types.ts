@@ -42,8 +42,8 @@ export interface VGSCollectInstance {
   setRouteId: (routeId: string) => void;
 }
 
-// SmartCheckout type definitions
-export interface SmartCheckoutOptions {
+// SimpleCheckout type definitions
+export interface SimpleCheckoutOptions {
   publishableKey: string;
 }
 

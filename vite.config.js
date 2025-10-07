@@ -1,7 +1,10 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { resolve } from 'path';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return {
   root: '.',
   server: {
     port: 3001,
@@ -10,9 +13,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     lib: {
-      entry: resolve(__dirname, 'src/SmartCheckout.ts'),
-      name: 'SmartCheckout',
-      fileName: 'SmartCheckout',
+      entry: resolve(__dirname, 'src/SimpleCheckout.ts'),
+      name: 'SimpleCheckout',
+      fileName: 'SimpleCheckout',
       formats: ['es', 'umd']
     },
     rollupOptions: {
@@ -32,4 +35,5 @@ export default defineConfig({
       '@': resolve(__dirname, './src')
     }
   }
-}); 
+  };
+});
