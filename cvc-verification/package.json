@@ -8,7 +8,7 @@
     "start": "npm run build && npx serve dist -p ${PORT:-3000}"
   },
   "dependencies": {
-    "simplecheckout-sdk": "1.2.1"
+    "simplecheckout-sdk": "^1.3.0"
   },
   "devDependencies": {
     "vite": "^5.0.0"

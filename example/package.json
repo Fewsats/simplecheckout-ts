@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "simplecheckout-sdk": "1.2.1",
+    "simplecheckout-sdk": "^1.3.0",
     "@vgs/collect-js": "^0.7.2"
   },
   "devDependencies": {
