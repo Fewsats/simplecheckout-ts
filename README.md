@@ -1,5 +1,8 @@
 # SimpleCheckout SDK
 
+[![npm version](https://img.shields.io/npm/v/simplecheckout-sdk.svg)](https://www.npmjs.com/package/simplecheckout-sdk)
+[![npm downloads](https://img.shields.io/npm/dm/simplecheckout-sdk.svg)](https://www.npmjs.com/package/simplecheckout-sdk)
+
 A modern, reusable TypeScript package for securely storing credit card information using SimpleCheckout.
 
 ## Installation
